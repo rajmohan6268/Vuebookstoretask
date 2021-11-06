@@ -6,7 +6,7 @@
 import authform from "../components/authform.vue";
 export default {
   components: { authform },
-  name: "login",
+  name: "register",
 };
 </script>
 

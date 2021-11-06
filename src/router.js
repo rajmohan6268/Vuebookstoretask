@@ -1,9 +1,10 @@
 import { createWebHistory, createRouter } from "vue-router";
-
-import Login from "@/views/Login.vue";
 import HelloWorld from "@/components/HelloWorld.vue";
-const NotFound = () => import('@/components/NotFound.vue')
 
+const Login = () => import("@/views/Login.vue");
+const Register = () => import("@/views/Register.vue");
+const NotFound = () => import("@/components/NotFound.vue");
+const Dashboard = () => import("@/views/Dashboard.vue");
 const routes = [
   {
     path: "/",
@@ -14,6 +15,19 @@ const routes = [
     path: "/login",
     name: "login",
     component: Login,
+    props: true,
+  },
+  {
+    path: "/dashboard",
+    name: "dashboard",
+    component: Dashboard,
+    props: true,
+  },
+
+  {
+    path: "/register",
+    name: "register",
+    component: Register,
     props: true,
   },
   {
@@ -28,7 +42,7 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  console.log(to, from, "from router ");
+  // console.log(to, from, "from router ");
   next();
 });
 
