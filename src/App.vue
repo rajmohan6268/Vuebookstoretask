@@ -1,16 +1,18 @@
 <template>
-  <img class="w-16 mx-auto"  alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Welcome to Your Vue.js App" />
+  <div class="flex justify-center w-full space-x-4 text-lg font-semibold">
+    <router-link to="/"> Home</router-link>
+    <router-link to="/login">login</router-link>
+  </div>
+
+  <transition name="fade" mode="out-in">
+    <router-view />
+  </transition>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
-
 export default {
   name: "App",
-  components: {
-    HelloWorld,
-  },
+  components: {},
 };
 </script>
 
