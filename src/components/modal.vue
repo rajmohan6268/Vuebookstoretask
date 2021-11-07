@@ -44,7 +44,6 @@ export default {};
   transition: opacity 0.3s ease;
 }
 .body {
-   height: fit-content;
     max-height: 700;
 }
 .modal-wrapper {
