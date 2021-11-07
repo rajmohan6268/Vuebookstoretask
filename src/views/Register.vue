@@ -1,5 +1,7 @@
 <template>
-<authform></authform>
+  <div class="flex items-center justify-center mt-40">
+    <authform></authform>
+  </div>
 </template>
 
 <script>

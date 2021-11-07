@@ -2,3 +2,56 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.fx-col {
+  @apply flex flex-col;
+}
+.fx-row {
+  @apply flex flex-row;
+}
+.fx-i {
+  @apply flex items-center;
+}
+
+.fx-i-jb {
+  @apply flex items-center justify-between;
+}
+.active-tab {
+  @apply  font-bold border-b-2 border-gray-500 shadow-sm bg-gray-50;
+}
+.inacive-tab {
+  @apply  font-bold text-gray-400 border-b-2 border-gray-50; 
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 3px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(230, 226, 226);
+}
+.blue {
+  background: #0069ff;
+}
+.blue:hover {
+  background: #0069ff;
+}
+
+.text-title {
+  color: #031b4e;
+}
+.tetx-sec {
+  color: #405379;
+}

@@ -5,12 +5,10 @@ import { createApp } from 'vue'
 import  App from './App.vue'
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { faPhone,faEye,faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import {faAd ,faSignOutAlt,faSearch,faPlus ,faTimes ,faTimesCircle,faMinus, faPhone,faEye,faEyeSlash,faTrash } from "@fortawesome/free-solid-svg-icons";
 
-library.add(faPhone);
-library.add(faEye);
-library.add(faEyeSlash);
-library.add(faPhone);
+library.add(faPhone,faSignOutAlt ,faSearch,faTimes,faTimesCircle ,faMinus ,faEye ,faEyeSlash ,faPhone,faTrash,faAd,faPlus);
+
 
 createApp(App).use(router)
 .component("font-awesome-icon", FontAwesomeIcon)
