@@ -1,22 +1,36 @@
 <template>
   <div class="container mx-auto">
     <!-- <button @click="show = !show">toggle</button> -->
-
+    {{ user }}
+    {{ book }}
     <div class="p-4 mb-10 bg-gray-100 fx-i-jb text-title">
-      <div class="text-2xl font-bold">Admin Dashboard</div>
+      <div class="text-2xl font-bold">
+        {{ user?.roles[0] === "ROLE_USER" ? "User" : "Admin" }}
+        Dashboard
+      </div>
 
-      <button
-        class="px-8 py-2 text-xl font-medium text-red-500 bg-white shadow-sm"
-      >
-        <font-awesome-icon class="mr-2" icon="sign-out-alt" /> logout
-      </button>
+      <div class="fx-i">
+        <div class="">
+          <img
+            src="https://icons.iconarchive.com/icons/papirus-team/papirus-status/512/avatar-default-icon.png"
+            class="w-12"
+          />
+        </div>
+        <div class="mx-4">{{ user?.username }}</div>
+        <button
+          @click="logOut()"
+          class="px-8 py-2 text-xl font-medium text-red-500 bg-white shadow-sm"
+        >
+          <font-awesome-icon class="mr-2" icon="sign-out-alt" /> logout
+        </button>
+      </div>
     </div>
 
     <div
       class="p-4 transition-all duration-1000 ease-in-out border border-gray-100 "
     >
       <div
-        class="space-x-5 text-lg font-semibold border-b-2 border-gray-200 fx-i tetx-sec"
+        class="space-x-5 text-lg font-semibold border-b-2 border-gray-200  fx-i tetx-sec"
       >
         <button
           :class="currentTab == 'Inventory' ? 'active-tab' : 'inacive-tab'"
@@ -59,7 +73,7 @@
 
           <div class="">
             <button
-              @click="show = true"
+              @click="showaddbook()"
               class="px-4 py-2 text-white bg-gray-100 rounded-sm shadow blue"
             >
               <font-awesome-icon class="mr-2" icon="plus" /> Add New Book
@@ -68,56 +82,60 @@
         </div>
 
         <!-- book card -->
+        <div class="space-y-3">
+          <div
+            v-for="(book, index) in Books"
+            :key="index"
+            class="justify-between p-3 border border-gray-200 rounded-lg  hover:shadow hover:border-gray-200 fx-i"
+          >
+            <div class="flex">
+              <div class="w-40">
+                <!-- :src="https://cdn.elearningindustry.com/wp-content/uploads/2016/05/top-10-books-every-college-student-read-1024x640.jpeg" -->
 
-        <div
-          class="justify-between p-3 border border-gray-200 rounded-lg hover:shadow hover:border-gray-200 fx-i"
-        >
-          <div class="flex">
-            <div class="">
-              <img
-                src="https://cdn.elearningindustry.com/wp-content/uploads/2016/05/top-10-books-every-college-student-read-1024x640.jpeg"
-                class="w-48 rounded-lg"
-              />
-            </div>
-
-            <div class="flex flex-col justify-around ml-8 font-bold text-left">
-              <div class="space-x-5 text-lg fx-i">
-                <div class="">Book Title</div>
-                <div class="text-sm font-medium">Author Name</div>
-                <div class="">price</div>
+                <img :src="book.image" class="w-48 rounded-lg" />
               </div>
 
-              <div class="">
-                Description:
-                <div class="h-10 max-w-3xl text-sm font-normal truncate">
-                  Once login user/admin will be redirected to this screen. It
-                  contains two tabs Inventory and orders. Has search option to
-                  search across available books.Once login user/admin will be
-                  redirected to this screen. It contains two tabs Inventory and
-                  orders. Has search option to search across available books.
+              <div
+                class="flex flex-col justify-around ml-8 font-bold text-left"
+              >
+                <div class="space-x-5 text-lg fx-i">
+                  <div class="">Book Title:{{ book.title }}</div>
+                  <div class="text-sm font-medium">
+                    Author : {{ book.author }}
+                  </div>
+                  <div class="">price : {{ book.price }}</div>
+                </div>
+
+                <div class="">
+                  Description:
+                  <div class="h-10 max-w-3xl text-sm font-normal truncate">
+                    {{ book.description }}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <div class="space-x-3 fx-i">
-            <div class="text-2xl font-medium">Available:</div>
-            <div class="px-4 py-2 text-xl font-bold">10</div>
-            <div class="space-x-3 text-xl fx-i">
-              <button
-                class="w-12 h-12 border rounded-full shadow hover:bg-green-50 hover:text-green-600"
-              >
-                <font-awesome-icon icon="plus" />
-              </button>
-              <button
-                class="w-12 h-12 border rounded-full shadow hover:bg-red-50 hover:text-red-600"
-              >
-                <font-awesome-icon icon="minus" />
+            <div class="space-x-3 fx-i">
+              <div class="text-2xl font-medium">Available:</div>
+              <div class="px-4 py-2 text-xl font-bold">{{ book.quantity }}</div>
+              <div class="space-x-3 text-xl fx-i">
+                <button
+                  @click="increasebookQuantity(book._id)"
+                  class="w-12 h-12 border rounded-full shadow  hover:bg-green-50 hover:text-green-600"
+                >
+                  <font-awesome-icon icon="plus" />
+                </button>
+                <button
+                  @click="decreasebookQuantity(book._id)"
+                  class="w-12 h-12 border rounded-full shadow  hover:bg-red-50 hover:text-red-600"
+                >
+                  <font-awesome-icon icon="minus" />
+                </button>
+              </div>
+              <button @click="deleteBook(book._id)" class="px-6 text-red-400">
+                <font-awesome-icon icon="trash" />
               </button>
             </div>
-            <button class="px-6 text-red-400">
-              <font-awesome-icon icon="trash" />
-            </button>
           </div>
         </div>
       </div>
@@ -144,7 +162,7 @@
       </div>
     </div>
 
-    <modal v-if="show" @close="show = false">
+    <modal id="modal" v-if="show" @close="show = false">
       <template #header>
         <div
           class="w-full p-4 text-xl font-medium bg-white border-b border-gray-200 "
@@ -157,22 +175,22 @@
           <div class="fx-col">
             <label>Title </label>
             <input
+              v-model="book.title"
               class="p-2 border"
               type="text"
               placeholder="enter Title"
               name="Title"
-              required
             />
           </div>
 
           <div class="fx-col">
             <label>Author Name </label>
             <input
+              v-model="book.author"
               class="p-2 border"
               type="text"
               placeholder="enter Author Name"
               name="Title"
-              required
             />
           </div>
 
@@ -180,25 +198,39 @@
             <label>Description </label>
 
             <textarea
+              v-model="book.description"
               class="w-full p-2 border"
               type="text-area "
               placeholder="enter Description"
               rows="4"
-              required
             />
           </div>
-          <div class="fx-col">
-            <label>Price </label>
+          <div class="grid grid-cols-2 gap-4">
+            <div class="fx-col">
+              <label>Price </label>
 
-            <input
-              class="p-2 border"
-              type="text"
-              placeholder="enter Author Name"
-              name="Price"
-              required
-            />
+              <input
+                v-model="book.price"
+                class="p-2 border"
+                type="Number"
+                placeholder="enter Author Name"
+                name="Price"
+              />
+            </div>
+            <div class="fx-col">
+              <label>Quantity </label>
+
+              <input
+                v-model="book.quantity"
+                class="p-2 border"
+                type="Number"
+                placeholder="enter Author Name"
+                name="Price"
+              />
+            </div>
           </div>
-          <div class="fx-col">
+
+          <div class="xl:hidden fx-col">
             <label>image </label>
 
             <div
@@ -223,15 +255,17 @@
                 class="absolute block w-full h-full opacity-0"
                 type="file"
                 placeholder="upload mage"
-                required
               />
             </div>
           </div>
+          {{ img }}
+          <imageupload @input="uploadedimg($event)" v-model="book.image" />
         </div>
       </template>
       <template #footer>
         <div class="flex justify-end p-2 border-t border-gray-200">
           <button
+            @click="addBook()"
             class="px-8 py-2 mr-4 text-white bg-gray-100 rounded-sm shadow blue"
           >
             save
@@ -239,25 +273,119 @@
         </div></template
       >
     </modal>
-    {{ state }}
+    {{ img }}
   </div>
 </template>
 <script>
 import modal from "./../components/modal.vue";
+import imageupload from "./../components/imageupload.vue";
+import api from "./../services/api";
+
+const book = {
+  title: "",
+  image: "",
+  author: "",
+  description: "",
+  price: "",
+  quantity: "",
+};
 
 export default {
   components: {
     modal,
+    imageupload,
   },
   data() {
     return {
       show: false,
       currentTab: "orders",
+      img: null,
+      book: JSON.parse(JSON.stringify(book)),
+      Books: [],
     };
   },
   computed: {
+    user() {
+      return this.$store.state.auth.user;
+    },
     state() {
-      return this.$store.state
+      return this.$store.state;
+    },
+  },
+  mounted() {
+    this.getbbooks();
+  },
+  methods: {
+    logOut() {
+      this.$store.dispatch("auth/logout");
+      this.$router.push("/login");
+    },
+    getbbooks() {
+      api
+        .get("/store/getbooks")
+        .then((data) => {
+          this.Books = data.data;
+        })
+        .catch((error) => {
+          return error;
+        });
+    },
+    decreasebookQuantity(_id) {
+      api
+        .post(`/users/admin/books/decreasequantity/${_id}`, {
+          role: this.user?.roles,
+        })
+        .then(() => {
+          this.getbbooks();
+        })
+        .catch((error) => {
+          return error;
+        });
+    },
+    increasebookQuantity(_id) {
+      api
+        .post(`/users/admin/books/increasequantity/${_id}`, {
+          role: this.user?.roles,
+        })
+        .then(() => {
+          this.getbbooks();
+        })
+        .catch((error) => {
+          return error;
+        });
+    },
+
+    deleteBook(_id) {
+      api
+        .delete(`/users/admin/deletebook/${_id}`)
+        .then(() => {
+          this.getbbooks();
+        })
+        .catch((error) => {
+          return error;
+        });
+    },
+    showaddbook() {
+      this.show = true;
+      this.book = JSON.parse(JSON.stringify(book));
+    },
+    addBook() {
+      api
+        .post("/users/admin/addbooks", this.book)
+        .then((data) => {
+          console.log(data);
+          this.show = false;
+          this.book = JSON.parse(JSON.stringify(book));
+          this.getbbooks();
+        })
+
+        .catch((error) => {
+          return error;
+        });
+    },
+
+    uploadedimg(e) {
+      console.log(e);
     },
   },
 };
