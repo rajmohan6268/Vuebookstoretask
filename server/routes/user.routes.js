@@ -2,19 +2,30 @@ module.exports = (app) => {
   const { authJwt } = require("../middlewares");
   const usercontroller = require("../controllers/user.controller");
   const router = require("express").Router();
-  const bookcontroller = require("../controllers/store.controller");
+  const storecontroller = require("../controllers/store.controller");
 
-  router.get("/:id",usercontroller.getUser );
+  router.get("/user/:id", usercontroller.getUser);
 
-
-  router.post("/books/quantity/:id",[authJwt.verifyToken, authJwt.isAdmin],  bookcontroller.quantity);
-
-  router.delete("/admin/books/deletebook/:id", bookcontroller.deletebook);
-
+  router.get(
+    "/orders/myorders",
+    [authJwt.verifyToken],
+    usercontroller.myorders
+  );
+  router.get("/admin/orders", [authJwt.verifyToken, authJwt.isAdmin], usercontroller.orders);
   router.post(
-    "/admin/addbooks",
-    // [authJwt.verifyToken, authJwt.isAdmin],
-    bookcontroller.addbooks
+    "/admin/books/",
+    [authJwt.verifyToken, authJwt.isAdmin],
+    storecontroller.addbooks
+  );
+  router.delete(
+    "/admin/books/:id",
+    [authJwt.verifyToken, authJwt.isAdmin],
+    storecontroller.deletebook
+  );
+  router.post(
+    "/admin/books/quantity/:id",
+    [authJwt.verifyToken, authJwt.isAdmin],
+    storecontroller.quantity
   );
 
   app.use("/api/users", router);

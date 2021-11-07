@@ -1,5 +1,63 @@
 const db = require("../models");
 const Book = db.book;
+const Order = db.order;
+const { decodedData } = require("./../utlis");
+exports.makeOrder = async (req, res) => {
+  // console.log(req.body);
+  let user = await decodedData(req);
+  if (!user.data.user) {
+    return res.status(401).send({
+      sucess: false,
+      message: "Unauthorized user",
+    });
+  }
+
+  console.log(user, "decoded");
+
+  const { email, quantity } = req.body;
+  const _book = await Book.findOne({ _id: req.body.book._id });
+
+  const order = new Order({
+    email: email,
+    book: req.body.book._id,
+    quantity: quantity,
+    orderedBy: user.data.user.id,
+    bookdata: _book,
+    title: _book.title,
+    amount: req.body.book.price * quantity,
+  });
+  try {
+    order.save(order).then(async (data) => {
+      console.log(data);
+
+
+      _book.quantity = _book.quantity - quantity;
+      _book
+        .save(_book)
+        .then(async () => {
+          res.status(201).json({
+            sucess: true,
+            status: "ok",
+            message: "order created",
+          });
+        })
+        .catch((err) => {
+          res.status(500).send({
+            sucess: false,
+
+            message:
+              err.message || "Some error occurred while creating  order .",
+          });
+        });
+    });
+  } catch (e) {
+    res.status(500).send({
+      sucess: false,
+
+      message: e.message || "Some error occurred while creating  order .",
+    });
+  }
+};
 
 exports.getbooks = async (req, res) => {
   const id = req.params.id;
@@ -23,32 +81,39 @@ exports.getbooks = async (req, res) => {
 };
 
 exports.addbooks = async (req, res) => {
-  const book = new Book({
-    title: req.body.title,
-    image: req.body.image || "https://i.imgur.com/ruzceQa.png",
-    author: req.body.author,
-    description: req.body.description,
-    price: req.body.price,
-    quantity: req.body.quantity,
-  });
-
-  book
-    .save(book)
-    .then((data) => {
-      res.status(201).json({
-        sucess: true,
-        status: "ok",
-        id: data._id,
-        message: "book added sucessfully",
-      });
-    })
-    .catch((err) => {
-      res.status(500).send({
-        sucess: false,
-
-        message: err.message || "Some error occurred while adding the book.",
-      });
+  try {
+    const book = new Book({
+      title: req.body.title,
+      image: req.body.image || "https://i.imgur.com/ruzceQa.png",
+      author: req.body.author,
+      description: req.body.description,
+      price: req.body.price,
+      quantity: req.body.quantity,
     });
+
+    book
+      .save(book)
+      .then((data) => {
+        res.status(201).json({
+          sucess: true,
+          status: "ok",
+          id: data._id,
+          message: "book added sucessfully",
+        });
+      })
+      .catch((err) => {
+        res.status(500).send({
+          sucess: false,
+
+          message: err.message || "Some error occurred while adding the book.",
+        });
+      });
+  } catch (e) {
+    res.status(500).json({
+      sucess: false,
+      message: e.message || "Some error occurred while adding the book.",
+    });
+  }
 };
 
 exports.deletebook = async (req, res) => {
@@ -84,79 +149,6 @@ exports.deletebook = async (req, res) => {
     });
   }
 };
-exports.increaseQuantity = async (req, res) => {
-  console.log(req.params, req.body);
-
-  try {
-    let _Book = await Book.findOne({ _id: req.params.id });
-    if (!_Book) {
-      return res.status(404).send({
-        sucess: false,
-        message: "Book not found with id " + req.params.id,
-      });
-    } else {
-      _Book.quantity = _Book.quantity + 1;
-      _Book
-        .save()
-        .then(async () => {
-          res.status(200).json({
-            sucess: false,
-            message: "book quanty increased",
-          });
-        })
-        .catch((err) => {
-          res.status(500).send({
-            sucess: false,
-            message: err.message || "Some error occurred while removing book.",
-          });
-        });
-    }
-  } catch (e) {
-    res.status(500).json({
-      sucess: false,
-      message:
-        e.message || "Some error occurred while increasing  the book quantity.",
-    });
-  }
-};
-
-exports.decreaseuantity = async (req, res) => {
-  console.log(req.params, req.body);
-
-  try {
-    let _Book = await Book.findOne({ _id: req.params.id });
-    if (!_Book) {
-      return res.status(404).send({
-        sucess: false,
-        message: "Book not found with id " + req.params.id,
-      });
-    } else {
-      _Book.quantity = _Book.quantity - 1;
-      _Book
-        .save()
-        .then(async () => {
-          res.status(200).json({
-            sucess: false,
-            message: "book quanty decreased",
-          });
-        })
-        .catch((err) => {
-          res.status(500).send({
-            sucess: false,
-            message:
-              err.message ||
-              "Some error occurred while decreasing  book quantity.",
-          });
-        });
-    }
-  } catch (e) {
-    res.status(500).json({
-      sucess: false,
-      message:
-        e.message || "Some error occurred while decreasing  book quantity.",
-    });
-  }
-};
 
 exports.quantity = async (req, res) => {
   console.log(req.params, req.body, req.query, req.query.role);
@@ -185,7 +177,9 @@ exports.quantity = async (req, res) => {
         .then(async () => {
           res.status(200).json({
             sucess: false,
-            message: `book quantity sucessfully ${intent === "inc"?'decreasing':'decreasing'} `,
+            message: `book quantity sucessfully ${
+              intent === "inc" ? "decreasing" : "decreasing"
+            } `,
           });
         })
         .catch((err) => {
@@ -193,7 +187,9 @@ exports.quantity = async (req, res) => {
             sucess: false,
             message:
               err.message ||
-              `Some error occurred while ${intent === "inc"?'decreasing':'decreasing'}  book quantity.`,
+              `Some error occurred while ${
+                intent === "inc" ? "decreasing" : "decreasing"
+              }  book quantity.`,
           });
         });
     }
@@ -201,7 +197,10 @@ exports.quantity = async (req, res) => {
     res.status(500).json({
       sucess: false,
       message:
-        e.message || `Some error occurred while ${intent === "inc"?'decreasing':'decreasing'}  book quantity.`,
+        e.message ||
+        `Some error occurred while ${
+          intent === "inc" ? "decreasing" : "decreasing"
+        }  book quantity.`,
     });
   }
 };

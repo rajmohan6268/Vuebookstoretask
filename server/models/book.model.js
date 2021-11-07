@@ -8,6 +8,7 @@ const Book = mongoose.model(
     author: String,
     description: String,
     price: Number,
+    title: String,
     quantity: Number,
     createdAt: { type: Date, default: Date.now },
   })

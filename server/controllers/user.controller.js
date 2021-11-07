@@ -1,5 +1,7 @@
 const db = require("../models");
 const User = db.user;
+const Order = db.order;
+const { decodedData } = require("./../utlis");
 
 exports.getUser = async (req, res) => {
   let id = req.params.id;
@@ -22,15 +24,119 @@ exports.getUser = async (req, res) => {
       });
     });
 };
+exports.orders = async (req, res) => {
 
-exports.allAccess = (req, res) => {
-  res.status(200).send("Public Content.");
+
+
+  Order.find({
+ 
+  })
+    .populate("book")
+    .populate("orderedBy",{ username:1 ,_id:1 })
+    .exec((err, orders) => {
+      if (err) {
+        res.status(500).send({
+          sucess: false,
+          message: "Error while retrieving orders",
+          err,
+        });
+        return;
+      }
+
+      if (!orders) {
+        return res.status(404).send({ message: "no orders found" });
+      }
+
+      res.status(200).send({
+        orders
+      });
+    })
+}
+
+exports.myorders = async (req, res) => {
+  console.log("working");
+  let user = await decodedData(req);
+
+  if (!user.data.user) {
+    return res.status(401).send({
+      sucess: false,
+      message: "Unauthorized user",
+    });
+  }
+
+  let id = user.data.user.id;
+
+  Order.find({
+    where: {
+      orderedBy: id,
+    },
+  })
+    .populate("book")
+    .populate("orderedBy",{ username:1 ,_id:1 })
+    .exec((err, orders) => {
+      if (err) {
+        res.status(500).send({
+          sucess: false,
+          message: "Error while retrieving orders",
+          err,
+        });
+        return;
+      }
+
+      if (!orders) {
+        return res.status(404).send({ message: "no orders found" });
+      }
+
+      res.status(200).send({
+        orders
+      });
+    })
 };
 
-exports.userContent = (req, res) => {
-  res.status(200).send("User Content.");
-};
+// Order.find({
+//   where: {
+//     orderedBy: id,
+//   },
+// })
+//   .populate("book", "name")
+//   .populate("orderedBy", "username")
+//   .exec((err, user) => {
+//     if (err) {
+//       res.status(500).send({ sucess: false,
+//         message: "Error while retrieving orders",
+//         err, });
+//       return;
+//     }
 
-exports.adminContent = (req, res) => {
-  res.status(200).send("Admin Content.");
-};
+//     if (!orde) {
+//       return res.status(404).send({ message: "User Not found." });
+//     }
+
+//     var passwordIsValid = bcrypt.compareSync(req.body.password, user.password);
+
+//     if (!passwordIsValid) {
+//       return res.status(401).send({
+//         accessToken: null,
+//         message: "Incorrect Password!",
+//       });
+//     }
+
+//     var token = jwt.sign({ id: user.id }, config.secret, {
+//       expiresIn: 86400, // 24 hours
+//     });
+
+//     var authorities = [];
+
+//     for (let i = 0; i < user.roles.length; i++) {
+//       authorities.push("ROLE_" + user.roles[i].name.toUpperCase());
+//     }
+
+//     res.status(200).send({
+//       id: user._id,
+//       username: user.username,
+
+//       roles: authorities,
+//       accessToken: token,
+//     });
+//   });
+

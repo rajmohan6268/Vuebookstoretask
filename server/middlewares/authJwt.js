@@ -19,7 +19,6 @@ const verifyToken = (req, res, next) => {
     next();
   });
 };
-
 const isAdmin = (req, res, next) => {
   User.findById(req.userId).exec((err, user) => {
     if (err) {
