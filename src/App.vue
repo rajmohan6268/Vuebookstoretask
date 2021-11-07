@@ -1,12 +1,14 @@
 <template>
-  <div class="flex justify-center w-full my-10 space-x-4 text-lg font-semibold">
+<div class="">
+    <div class="flex justify-center w-full my-10 space-x-4 text-lg font-semibold">
     <router-link to="/"> Home</router-link>
     <router-link to="/login">login</router-link>
     <router-link to="/Register">Register</router-link>
     <router-link to="/Dashboard">Dashboard</router-link>
   </div>
-
   <router-view />
+
+</div>
 </template>
 
 <script>

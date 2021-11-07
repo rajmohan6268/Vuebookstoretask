@@ -12,7 +12,9 @@
 .fx-i {
   @apply flex items-center;
 }
-
+. fx-i-jc {
+ @apply flex items-center justify-center;
+}
 .fx-i-jb {
   @apply flex items-center justify-between;
 }
@@ -22,7 +24,9 @@
 .inacive-tab {
   @apply  font-bold text-gray-400 border-b-2 border-gray-50; 
 }
-
+.fsm-lg {
+  @apply text-lg font-semibold;
+}
 
  
 /* width */

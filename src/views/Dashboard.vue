@@ -1,8 +1,8 @@
 <template>
-  <div class="container mx-auto">
+  <div class="mx-auto 2xl:container">
     <!-- <button @click="show = !show">toggle</button> -->
-    {{ user }}
-    {{ book }}
+    <!-- {{ user }}
+    {{ book }} -->
     <div class="p-4 mb-10 bg-gray-100 fx-i-jb text-title">
       <div class="text-2xl font-bold">
         {{ user?.roles[0] === "ROLE_USER" ? "User" : "Admin" }}
@@ -30,7 +30,7 @@
       class="p-4 transition-all duration-1000 ease-in-out border border-gray-100 "
     >
       <div
-        class="space-x-5 text-lg font-semibold border-b-2 border-gray-200 fx-i tetx-sec"
+        class="space-x-5 text-lg font-semibold border-b-2 border-gray-200  fx-i tetx-sec"
       >
         <button
           :class="currentTab == 'Inventory' ? 'active-tab' : 'inacive-tab'"
@@ -45,10 +45,15 @@
         <button
           :class="currentTab == 'orders' ? 'active-tab ' : 'inacive-tab'"
           class="flex items-center px-8 py-2 space-x-3"
-          @click="currentTab = 'orders'"
+          @click="(currentTab = 'orders'), getorderdetails()"
         >
           <div class=""><img src="./../assets/orders.png" class="w-8" /></div>
-          <div class="">Orders</div>
+          <div class="">
+            Orders
+            <span class="rounded-full fx-i-jc -right-4 -top-4">
+              ({{ orderdetails?.orders?.length }})
+            </span>
+          </div>
         </button>
       </div>
       <!-- inventory -->
@@ -73,6 +78,7 @@
 
           <div class="">
             <button
+              v-if="user?.roles[0] === 'ROLE_ADMIN'"
               @click="showaddbook()"
               class="px-4 py-2 text-white bg-gray-100 rounded-sm shadow blue"
             >
@@ -86,7 +92,7 @@
           <div
             v-for="(book, index) in Books"
             :key="index"
-            class="justify-between p-3 border border-gray-200 rounded-lg hover:shadow hover:border-gray-200 fx-i"
+            class="justify-between p-3 border border-gray-200 rounded-lg  hover:shadow hover:border-gray-200 fx-i"
           >
             <div class="flex">
               <div class="w-40">
@@ -120,19 +126,42 @@
               <div class="px-4 py-2 text-xl font-bold">{{ book.quantity }}</div>
               <div class="space-x-3 text-xl fx-i">
                 <button
-                  @click="quantity(book._id, 'inc')"
-                  class="w-12 h-12 border rounded-full shadow hover:bg-green-50 hover:text-green-600"
+                  @click="quantity(book._id, 'inc', index)"
+                  class="w-12 h-12 border rounded-full shadow  hover:bg-green-50 hover:text-green-600"
                 >
                   <font-awesome-icon icon="plus" />
                 </button>
                 <button
-                  @click="quantity(book._id, 'dec')"
-                  class="w-12 h-12 border rounded-full shadow hover:bg-red-50 hover:text-red-600"
+                  @click="quantity(book._id, 'dec', index)"
+                  class="w-12 h-12 border rounded-full shadow  hover:bg-red-50 hover:text-red-600"
                 >
                   <font-awesome-icon icon="minus" />
                 </button>
               </div>
-              <button @click="deleteBook(book._id)" class="px-6 text-red-400">
+              <button
+                v-if="user?.roles[0] === 'ROLE_USER'"
+                @click="buy(book._id, index)"
+                class="px-6 py-2 text-white"
+                :class="
+                  (activeBookindex === index) & (showBuyquantity > 0)
+                    ? 'blue '
+                    : 'bg-gray-500 hover:bg-gray-700'
+                "
+              >
+                <font-awesome-icon icon="shopping-cart" />
+                buy
+                <span
+                  class=""
+                  v-if="showBuyquantity & (activeBookindex === index)"
+                >
+                  {{ buyquantity }}
+                </span>
+              </button>
+              <button
+                v-if="user?.roles[0] === 'ROLE_ADMIN'"
+                @click="deleteBook(book._id)"
+                class="px-6 text-red-400"
+              >
                 <font-awesome-icon icon="trash" />
               </button>
             </div>
@@ -141,21 +170,38 @@
       </div>
       <!--  -->
       <div v-if="currentTab == 'orders'" class="mt-10 text-left">
-        <div class="mb-4 text-2xl font-semibold">Total orders: 20</div>
-        <table class="w-full table-fixed">
+        <div class="mb-4 text-2xl font-semibold">
+          Total orders: ({{ orderdetails?.orders?.length }})
+        </div>
+        <table class="w-full border table-fixed">
           <thead class="w-full">
             <tr class="text-center divide-x">
-              <th class="w-1/6 p-2">Order Id</th>
-              <th class="w-1/6 p-2">Buyer email</th>
-              <th class="w-1/6 p-2">Book Name</th>
-              <th class="w-1/6 p-2">Quantity</th>
-              <th class="w-1/6 p-2">Order Date/Time</th>
-              <th class="w-1/6 p-2">Total amount</th>
+              <!-- <th class="w-4 ">S.No</th> -->
+              <th class="w-1/6 p-4">Order Id</th>
+              <th class="w-1/6">Buyer email</th>
+              <th class="w-1/6">Book Name</th>
+              <th class="w-1/6">Quantity</th>
+              <th class="w-1/6">Order Date/Time</th>
+              <th class="w-1/6">Total amount</th>
             </tr>
           </thead>
-          <tbody class="space-y-4">
-            <tr v-for="i in 10" :key="i" class="divide-x">
-              <td v-for="i in 6" :key="i" class="w-1/6 p-2">content {{ i }}</td>
+          <tbody class="border">
+            <tr
+              v-for="(i, index) in orderdetails.orders"
+              :key="index"
+              class="text-center divide-x"
+            >
+              <!-- <th class="w-4">{{index+1}}</th> -->
+              <td class="w-1/6 p-4 text-left truncate">{{ i._id || "--" }}</td>
+              <td class="w-1/6 truncate">{{ i.email || "" }}</td>
+              <td class="w-1/6 truncate">
+                <span v-if="i.book">{{ i.book.title }}</span>
+                <span v-else class="p-1 bg-red-300"> book deleted </span>
+              </td>
+
+              <td class="w-1/6 truncate">{{ i.quantity || "--" }}</td>
+              <td class="w-1/6 truncate">{{ i.createdAt || "--" }}</td>
+              <td class="w-1/6 truncate">{{ i.amount || "--" }}</td>
             </tr>
           </tbody>
         </table>
@@ -210,6 +256,7 @@
               <label>Price </label>
 
               <input
+                min="0"
                 v-model="book.price"
                 class="p-2 border"
                 type="Number"
@@ -221,6 +268,7 @@
               <label>Quantity </label>
 
               <input
+                min="0"
                 v-model="book.quantity"
                 class="p-2 border"
                 type="Number"
@@ -273,6 +321,69 @@
         </div></template
       >
     </modal>
+
+    <modal id="modal" v-if="showcartmodal" @close="showcartmodal = false">
+      <template #header>
+        <div
+          class="w-full p-4 text-xl font-medium bg-white border-b border-gray-200 "
+        >
+          Cart
+        </div>
+      </template>
+      <template #body>
+        <div class="p-4 mt-8 fx-i-jb">
+          <div class="">
+            <div class="fsm-lg">Book name</div>
+            <div class="">
+              {{ Books[activeBookindex].title }}
+            </div>
+          </div>
+
+          <div class="space-x-10 text-center fx-i">
+            <div class="">
+              <div class="fsm-lg">Price * quantity</div>
+              <div class="">
+                {{ Books[activeBookindex].price }} * {{ buyquantity }}
+              </div>
+            </div>
+            <div class="">
+              <div class="fsm-lg">Total Amount</div>
+              <div class="text-2xl font-semibold">
+                {{ Books[activeBookindex].price * buyquantity }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- <div class="w-full p-6 my-3">
+        
+        </div> -->
+
+        <div class="p-4 fx-col">
+          <label class="mb-2">Billing email </label>
+
+          <input
+            min="0"
+            v-model="billingemail"
+            class="p-2 border"
+            type="email"
+            placeholder="enter billing  email"
+            name="Price"
+          />
+        </div>
+      </template>
+      <template #footer>
+        <div class="flex justify-end p-2 border-t border-gray-200">
+          <button
+            @click="buybook()"
+            class="px-8 py-2 mr-4 text-white bg-gray-100 rounded-sm shadow blue"
+          >
+            confirm order
+          </button>
+        </div>
+      </template>
+    </modal>
+
     {{ img }}
   </div>
 </template>
@@ -280,6 +391,7 @@
 import modal from "./../components/modal.vue";
 import imageupload from "./../components/imageupload.vue";
 import api from "./../services/api";
+import "../index.css";
 
 const book = {
   title: "",
@@ -297,11 +409,17 @@ export default {
   },
   data() {
     return {
+      billingemail: "",
+      showBuyquantity: false,
+      activeBookindex: null,
+      buyquantity: 0,
+      showcartmodal: false,
       show: false,
-      currentTab: "orders",
+      currentTab: "Inventory",
       img: null,
       book: JSON.parse(JSON.stringify(book)),
       Books: [],
+      orderdetails: [],
     };
   },
   computed: {
@@ -314,11 +432,56 @@ export default {
   },
   mounted() {
     this.getbbooks();
+
+    this.getorderdetails();
   },
   methods: {
+    getorderdetails() {
+      let role = this.user?.roles;
+
+      if (role == "ROLE_ADMIN") {
+        api.get("/users/admin/orders").then((res) => {
+          this.orderdetails = res.data;
+        });
+      } else {
+        api.get("/users/orders/myorders").then((res) => {
+          this.orderdetails = res.data;
+        });
+      }
+    },
+
+    buybook() {
+      api
+        .post("/store/order", {
+          book: this.Books[this.activeBookindex],
+          quantity: this.buyquantity,
+          amount: this.Books[this.activeBookindex].price * this.buyquantity,
+          email: this.billingemail,
+        })
+        .then((data) => {
+          this.getbbooks();
+          this.getorderdetails();
+          this.showcartmodal = false;
+          this.showBuyquantity = false;
+          this.activeBookindex = null;
+          this.buyquantity = 0;
+
+          console.log(data);
+        })
+        .catch((error) => {
+          return error;
+        });
+    },
     logOut() {
       this.$store.dispatch("auth/logout");
       this.$router.push("/login");
+    },
+
+    buy(id, index) {
+      console.log(id, index);
+      if (this.activeBookindex == index) {
+        this.showcartmodal = true;
+      }
     },
     getbbooks() {
       api
@@ -330,58 +493,47 @@ export default {
           return error;
         });
     },
-    quantity(_id, intent) {
+    quantity(_id, intent, index) {
       let role = this.user?.roles;
 
       if (role == "ROLE_ADMIN") {
         this.increaseOrDecriseQuantity(_id, intent);
       } else if (role == "ROLE_USER") {
-        console.log("user");
+        this.showBuyquantity = true;
+
+        if (this.activeBookindex !== index) {
+          this.buyquantity = 0;
+        }
+        this.activeBookindex = index;
+
+        if (intent == "inc") {
+          this.buyquantity = this.buyquantity + 1;
+        } else if (this.buyquantity > 0) {
+          this.buyquantity = this.buyquantity - 1;
+        }
+
+        console.log("user", index);
       }
     },
-    // increaseOrDecriseQuantity(_id, intent) {
-    //   api
-    //     .post(
-    //       `/users/books/quantity/${_id}/?role=${this.user?.roles[0]}&intent=${intent}`,
-    //       {
-    //         role: this.user?.roles,
-    //       }
-    //     )
-    //     .then(() => {
-    //       this.getbbooks();
-    //     })
-    //     .catch((error) => {
-    //       return error;
-    //     });
-    // },
-    // decreasebookQuantity(_id) {
-    //   api
-    //     .post(`/users/admin/books/decreasequantity/${_id}/`, {
-    //       role: this.user?.roles,
-    //     })
-    //     .then(() => {
-    //       this.getbbooks();
-    //     })
-    //     .catch((error) => {
-    //       return error;
-    //     });
-    // },
-    // increasebookQuantity(_id) {
-    //   api
-    //     .post(`/users/admin/books/increasequantity/${_id}`, {
-    //       role: this.user?.roles,
-    //     })
-    //     .then(() => {
-    //       this.getbbooks();
-    //     })
-    //     .catch((error) => {
-    //       return error;
-    //     });
-    // },
+    increaseOrDecriseQuantity(_id, intent) {
+      api
+        .post(
+          `/users/admin/books/quantity/${_id}/?role=${this.user?.roles[0]}&intent=${intent}`,
+          {
+            role: this.user?.roles,
+          }
+        )
+        .then(() => {
+          this.getbbooks();
+        })
+        .catch((error) => {
+          return error;
+        });
+    },
 
     deleteBook(_id) {
       api
-        .delete(`/users/admin/deletebook/${_id}`)
+        .delete(`/users/admin/books/${_id}`)
         .then(() => {
           this.getbbooks();
         })
@@ -395,7 +547,7 @@ export default {
     },
     addBook() {
       api
-        .post("/users/admin/addbooks", this.book)
+        .post("/users/admin/books", this.book)
         .then((data) => {
           console.log(data);
           this.show = false;

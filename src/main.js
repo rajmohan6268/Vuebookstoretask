@@ -6,7 +6,7 @@ import store from "./store";
 import setupInterceptors from "./services/setupInterceptors";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import {
+import {faShoppingCart,
   faHome,
   faAd,
   faSignOutAlt,
@@ -34,7 +34,7 @@ library.add(
   faPhone,
   faTrash,
   faAd,
-  faPlus
+  faPlus,faShoppingCart
 );
 setupInterceptors(store);
 
