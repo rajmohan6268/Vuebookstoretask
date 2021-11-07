@@ -1,22 +1,24 @@
 <template>
-  <div class="">
+  <div class="w-full">
     <div
-      class="flex flex-col w-full max-w-sm p-8 mx-auto my-10 text-left border"
+      class="flex flex-col w-full max-w-md p-8 mx-auto my-10 text-left border shadow-sm "
     >
-      <div>{{ this.$route.name }}</div>
-      <label>Username </label>
+      <div class="justify-center mb-4 text-2xl font-bold text-center fx-i text-title">
+        <div class="space-x-2 fx-i"> <img class="w-8 mx-auto" alt="Vue logo" src="./../assets/logo.png" />  {{ this.$route.name }}</div>
+      </div>
+      <label class="text-lg font-medium ">Username </label>
       <input
         @change="submitted = false"
         autocomplete="username"
-        class="p-2 border"
+        class="w-full p-2 border"
         type="text"
         v-model="form.username"
         placeholder="Username"
         name="username"
         required
       />
-      <label>Password </label>
-      <div class="relative flex items-center justify-end">
+      <label class="mt-4 text-lg font-medium">Password </label>
+      <div class="relative justify-end fx-i">
         <button @click="togglePasswordVisibility()" class="absolute mx-4">
           <font-awesome-icon v-if="!passwordVisible" icon="eye" />
           <font-awesome-icon v-if="passwordVisible" icon="eye-slash" />
@@ -33,13 +35,8 @@
           required
         />
       </div>
-
-      <button class="px-6 py-2 mt-4 border" @click="submit()">
-        {{ this.$route.name }}
-      </button>
-
       <div v-if="submitted & passwordValidation.errors.length">
-        <h2>Hints</h2>
+        <h2>Hints:</h2>
         <p
           class="text-red-500"
           v-for="(error, index) in passwordValidation.errors"
@@ -48,6 +45,9 @@
           {{ error }}
         </p>
       </div>
+      <button class="px-6 py-2 mt-8 text-white border blue" @click="submit()">
+        {{ this.$route.name }}
+      </button>
     </div>
   </div>
 </template>
@@ -65,7 +65,7 @@ export default {
         // { message: "One lowercase letter required.", regex: /[a-z]+/ },
         // { message: "One uppercase letter required.", regex: /[A-Z]+/ },
         //	{ message:"One number required.", regex:/[0-9]+/ }
-        { message: "password: minimum 8 characters required", regex: /.{8,}/ },
+        { message: "password requires atleast  8 characters ", regex: /.{8,}/ },
       ],
       passwordVisible: false,
       submitted: false,
