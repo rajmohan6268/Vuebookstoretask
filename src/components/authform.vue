@@ -3,12 +3,17 @@
     <div
       class="flex flex-col w-full max-w-md p-8 mx-auto my-10 text-left border shadow-sm "
     >
-      <div class="justify-center mb-4 text-2xl font-bold text-center fx-i text-title">
-        <div class="space-x-2 fx-i"> <img class="w-8 mx-auto" alt="Vue logo" src="./../assets/logo.png" />  {{ this.$route.name }}</div>
+      <div
+        class="justify-center mb-4 text-2xl font-bold text-center fx-i text-title"
+      >
+        <div class="space-x-2 fx-i">
+          <img class="w-8 mx-auto" alt="Vue logo" src="./../assets/logo.png" />
+          {{ this.$route.name }}
+        </div>
       </div>
-      <label class="text-lg font-medium ">Username </label>
+      <label class="text-lg font-medium">Username </label>
       <input
-        @change="submitted = false"
+        @input="cleardefault()"
         autocomplete="username"
         class="w-full p-2 border"
         type="text"
@@ -25,7 +30,7 @@
         </button>
 
         <input
-          @change="submitted = false"
+          @input="cleardefault()"
           autocomplete="current-password"
           class="w-full p-2 pr-12 border"
           :type="passwordVisible ? 'text' : 'password'"
@@ -44,10 +49,18 @@
         >
           {{ error }}
         </p>
+        <p
+          class="text-red-500"
+          v-for="(error, index) in usernameValidation.errors"
+          :key="index"
+        >
+          {{ error }}
+        </p>
       </div>
       <button class="px-6 py-2 mt-8 text-white border blue" @click="submit()">
         {{ this.$route.name }}
       </button>
+      <p class="mt-4 text-center text-red-500">{{ message }}</p>
     </div>
   </div>
 </template>
@@ -59,14 +72,24 @@ const form = {
 };
 export default {
   name: "AuthForm",
+  props: {
+    message: {
+      typeof: String,
+      requied: false,
+      default: () => {
+        return "";
+      },
+    },
+  },
   data() {
     return {
-      rules: [
+      passwordRules: [
         // { message: "One lowercase letter required.", regex: /[a-z]+/ },
         // { message: "One uppercase letter required.", regex: /[A-Z]+/ },
         //	{ message:"One number required.", regex:/[0-9]+/ }
         { message: "password requires atleast  8 characters ", regex: /.{8,}/ },
       ],
+      usernameRules: [{ message: "username required", regex: /.{1,}/ }],
       passwordVisible: false,
       submitted: false,
       form: JSON.parse(JSON.stringify(form)),
@@ -76,8 +99,21 @@ export default {
   computed: {
     passwordValidation() {
       let errors = [];
-      for (let condition of this.rules) {
+      for (let condition of this.passwordRules) {
         if (!condition.regex.test(this.form.password)) {
+          errors.push(condition.message);
+        }
+      }
+      if (errors.length === 0) {
+        return { valid: true, errors };
+      } else {
+        return { valid: false, errors };
+      }
+    },
+    usernameValidation() {
+      let errors = [];
+      for (let condition of this.usernameRules) {
+        if (!condition.regex.test(this.form.username)) {
           errors.push(condition.message);
         }
       }
@@ -89,19 +125,32 @@ export default {
     },
   },
   methods: {
+    cleardefault() {
+      this.submitted = false;
+      this.$emit("clearmessage");
+    },
+
     togglePasswordVisibility() {
       this.passwordVisible = !this.passwordVisible;
     },
     submit() {
       this.submitted = true;
-      if (this.passwordValidation) {
+      if (
+        this.passwordValidation.valid & this.usernameValidation.valid ||
+        this.form.username === "admin"
+      ) {
         this.$emit("submit", {
           username: this.form.username,
           password: this.form.password,
         });
         console.log("sucess");
       }
-      console.log("failed", this.form, this.passwordValidation);
+      console.log(
+        "failed",
+        this.form,
+        this.passwordValidation,
+        this.usernameValidation
+      );
 
       //   setTimeout(() => {
       //     this.submitted = false;

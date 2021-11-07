@@ -23,23 +23,25 @@
   @apply  font-bold text-gray-400 border-b-2 border-gray-50; 
 }
 
+
+ 
 /* width */
-::-webkit-scrollbar {
+#modal ::-webkit-scrollbar {
   width: 3px;
 }
 
 /* Track */
-::-webkit-scrollbar-track {
+#modal ::-webkit-scrollbar-track {
   background: #f1f1f1;
 }
 
 /* Handle */
-::-webkit-scrollbar-thumb {
+#modal::-webkit-scrollbar-thumb {
   background: #888;
 }
 
 /* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
+#modal::-webkit-scrollbar-thumb:hover {
   background: rgb(230, 226, 226);
 }
 .blue {
