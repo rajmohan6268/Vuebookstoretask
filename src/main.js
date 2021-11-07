@@ -2,7 +2,8 @@ import "./index.css";
 import router from "./router";
 import { createApp } from "vue";
 import App from "./App.vue";
-import store from "./../store";
+import store from "./store";
+import setupInterceptors from './services/setupInterceptors';
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
@@ -34,6 +35,7 @@ library.add(
   faAd,
   faPlus
 );
+setupInterceptors(store);
 
 createApp(App)
   .use(store)

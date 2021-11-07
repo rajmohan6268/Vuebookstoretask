@@ -1,10 +1,12 @@
 import { createWebHistory, createRouter } from "vue-router";
 import HelloWorld from "@/components/HelloWorld.vue";
+import store from "./store";
 
 const Login = () => import("@/views/Login.vue");
 const Register = () => import("@/views/Register.vue");
 const NotFound = () => import("@/components/NotFound.vue");
 const Dashboard = () => import("@/views/Dashboard.vue");
+
 const routes = [
   {
     path: "/",
@@ -22,6 +24,9 @@ const routes = [
     name: "dashboard",
     component: Dashboard,
     props: true,
+    meta: {
+      requiresAuth: true,
+    },
   },
 
   {
@@ -42,8 +47,18 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  // console.log(to, from, "from router ");
-  next();
+  if (to.matched.some((record) => record.meta.requiresAuth)) {
+    const islogedin = store.getters["auth/islogedin"];
+
+    console.log(islogedin);
+    if (islogedin) {
+      next();
+      return;
+    }
+    next("/login");
+  } else {
+    next();
+  }
 });
 
 export default router;

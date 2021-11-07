@@ -239,7 +239,7 @@
         </div></template
       >
     </modal>
-    {{state}}
+    {{ state }}
   </div>
 </template>
 <script>
