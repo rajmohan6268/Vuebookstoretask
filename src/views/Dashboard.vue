@@ -120,8 +120,6 @@
             </button>
           </div>
         </div>
-
-        
       </div>
       <!--  -->
       <div v-if="currentTab == 'orders'" class="mt-10 text-left">
@@ -219,8 +217,8 @@
                   stroke-linecap="round"
                   stroke-linejoin="round"
                 ></path>
-            
-              </svg>  click here to upload file
+              </svg>
+              click here to upload file
               <input
                 class="absolute block w-full h-full opacity-0"
                 type="file"
@@ -241,10 +239,12 @@
         </div></template
       >
     </modal>
+    {{state}}
   </div>
 </template>
 <script>
 import modal from "./../components/modal.vue";
+
 export default {
   components: {
     modal,
@@ -254,6 +254,11 @@ export default {
       show: false,
       currentTab: "orders",
     };
+  },
+  computed: {
+    state() {
+      return this.$store.state
+    },
   },
 };
 </script>
