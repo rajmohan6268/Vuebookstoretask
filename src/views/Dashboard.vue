@@ -30,12 +30,12 @@
       class="p-4 transition-all duration-1000 ease-in-out border border-gray-100 "
     >
       <div
-        class="space-x-5 text-lg font-semibold border-b-2 border-gray-200  fx-i tetx-sec"
+        class="space-x-5 text-lg font-semibold border-b-2 border-gray-200 fx-i tetx-sec"
       >
         <button
           :class="currentTab == 'Inventory' ? 'active-tab' : 'inacive-tab'"
           class="flex items-center px-8 py-2 space-x-3"
-          @click="currentTab = 'Inventory'"
+          @click="(currentTab = 'Inventory'), getbbooks()"
         >
           <div class="">
             <img src="./../assets/inventory.svg" class="w-8" />
@@ -86,7 +86,7 @@
           <div
             v-for="(book, index) in Books"
             :key="index"
-            class="justify-between p-3 border border-gray-200 rounded-lg  hover:shadow hover:border-gray-200 fx-i"
+            class="justify-between p-3 border border-gray-200 rounded-lg hover:shadow hover:border-gray-200 fx-i"
           >
             <div class="flex">
               <div class="w-40">
@@ -120,14 +120,14 @@
               <div class="px-4 py-2 text-xl font-bold">{{ book.quantity }}</div>
               <div class="space-x-3 text-xl fx-i">
                 <button
-                  @click="increasebookQuantity(book._id)"
-                  class="w-12 h-12 border rounded-full shadow  hover:bg-green-50 hover:text-green-600"
+                  @click="quantity(book._id, 'inc')"
+                  class="w-12 h-12 border rounded-full shadow hover:bg-green-50 hover:text-green-600"
                 >
                   <font-awesome-icon icon="plus" />
                 </button>
                 <button
-                  @click="decreasebookQuantity(book._id)"
-                  class="w-12 h-12 border rounded-full shadow  hover:bg-red-50 hover:text-red-600"
+                  @click="quantity(book._id, 'dec')"
+                  class="w-12 h-12 border rounded-full shadow hover:bg-red-50 hover:text-red-600"
                 >
                   <font-awesome-icon icon="minus" />
                 </button>
@@ -322,7 +322,7 @@ export default {
     },
     getbbooks() {
       api
-        .get("/store/getbooks")
+        .get(`/store/getbooks`)
         .then((data) => {
           this.Books = data.data;
         })
@@ -330,30 +330,54 @@ export default {
           return error;
         });
     },
-    decreasebookQuantity(_id) {
-      api
-        .post(`/users/admin/books/decreasequantity/${_id}`, {
-          role: this.user?.roles,
-        })
-        .then(() => {
-          this.getbbooks();
-        })
-        .catch((error) => {
-          return error;
-        });
+    quantity(_id, intent) {
+      let role = this.user?.roles;
+
+      if (role == "ROLE_ADMIN") {
+        this.increaseOrDecriseQuantity(_id, intent);
+      } else if (role == "ROLE_USER") {
+        console.log("user");
+      }
     },
-    increasebookQuantity(_id) {
-      api
-        .post(`/users/admin/books/increasequantity/${_id}`, {
-          role: this.user?.roles,
-        })
-        .then(() => {
-          this.getbbooks();
-        })
-        .catch((error) => {
-          return error;
-        });
-    },
+    // increaseOrDecriseQuantity(_id, intent) {
+    //   api
+    //     .post(
+    //       `/users/books/quantity/${_id}/?role=${this.user?.roles[0]}&intent=${intent}`,
+    //       {
+    //         role: this.user?.roles,
+    //       }
+    //     )
+    //     .then(() => {
+    //       this.getbbooks();
+    //     })
+    //     .catch((error) => {
+    //       return error;
+    //     });
+    // },
+    // decreasebookQuantity(_id) {
+    //   api
+    //     .post(`/users/admin/books/decreasequantity/${_id}/`, {
+    //       role: this.user?.roles,
+    //     })
+    //     .then(() => {
+    //       this.getbbooks();
+    //     })
+    //     .catch((error) => {
+    //       return error;
+    //     });
+    // },
+    // increasebookQuantity(_id) {
+    //   api
+    //     .post(`/users/admin/books/increasequantity/${_id}`, {
+    //       role: this.user?.roles,
+    //     })
+    //     .then(() => {
+    //       this.getbbooks();
+    //     })
+    //     .catch((error) => {
+    //       return error;
+    //     });
+    // },
 
     deleteBook(_id) {
       api

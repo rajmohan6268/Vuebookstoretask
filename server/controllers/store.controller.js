@@ -143,7 +143,9 @@ exports.decreaseuantity = async (req, res) => {
         .catch((err) => {
           res.status(500).send({
             sucess: false,
-            message: err.message || "Some error occurred while decreasing  book quantity.",
+            message:
+              err.message ||
+              "Some error occurred while decreasing  book quantity.",
           });
         });
     }
@@ -152,6 +154,54 @@ exports.decreaseuantity = async (req, res) => {
       sucess: false,
       message:
         e.message || "Some error occurred while decreasing  book quantity.",
+    });
+  }
+};
+
+exports.quantity = async (req, res) => {
+  console.log(req.params, req.body, req.query, req.query.role);
+  let role = req.query.role || req.body.role;
+
+  const intent = req.query.intent;
+  console.log(typeof intent, "type");
+  try {
+    const _Book = await Book.findOne({ _id: req.params.id });
+
+    if (!_Book) {
+      return res.status(404).send({
+        sucess: false,
+        message: "Book not found with id " + req.params.id,
+      });
+    } else {
+      if (intent === "inc") {
+        _Book.quantity = _Book.quantity + 1;
+      }
+      if (intent === "dec") {
+        _Book.quantity = _Book.quantity - 1;
+      }
+
+      _Book
+        .save()
+        .then(async () => {
+          res.status(200).json({
+            sucess: false,
+            message: `book quantity sucessfully ${intent === "inc"?'decreasing':'decreasing'} `,
+          });
+        })
+        .catch((err) => {
+          res.status(500).send({
+            sucess: false,
+            message:
+              err.message ||
+              `Some error occurred while ${intent === "inc"?'decreasing':'decreasing'}  book quantity.`,
+          });
+        });
+    }
+  } catch (e) {
+    res.status(500).json({
+      sucess: false,
+      message:
+        e.message || `Some error occurred while ${intent === "inc"?'decreasing':'decreasing'}  book quantity.`,
     });
   }
 };

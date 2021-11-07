@@ -4,17 +4,12 @@ module.exports = (app) => {
   const router = require("express").Router();
   const bookcontroller = require("../controllers/store.controller");
 
-  router.get(
-    "/:id",
+  router.get("/:id",usercontroller.getUser );
 
-    usercontroller.getUser
-  );
-  //router.get("/", [authJwt.verifyToken], controller.userBoard);
 
-  router
-  .delete("/admin/books/deletebook/:id", bookcontroller.deletebook)
-  .post("/admin/books/increasequantity/:id", bookcontroller.increaseQuantity)
-   .post("/admin/books/decreasequantity/:id", bookcontroller.decreaseuantity);
+  router.post("/books/quantity/:id",[authJwt.verifyToken, authJwt.isAdmin],  bookcontroller.quantity);
+
+  router.delete("/admin/books/deletebook/:id", bookcontroller.deletebook);
 
   router.post(
     "/admin/addbooks",
