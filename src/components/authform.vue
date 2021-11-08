@@ -60,7 +60,25 @@
       <button class="px-6 py-2 mt-8 text-white border blue" @click="submit()">
         {{ this.$route.name }}
       </button>
+      <router-link
+        class="mt-1"
+        :to="
+          this.$route.name === 'login'
+            ? { path: '/Register' }
+            : { path: '/login' }
+        "
+      >
+        click here to
+        <span class="text-blue-500 underline"
+          >{{ this.$route.name === "login" ? "Register" : "login" }} </span
+        >!
+      </router-link>
+
       <p class="mt-4 text-center text-red-500">{{ message }}</p>
+    </div>
+
+    <div class="">
+      <p class="text-red-500">Note: * admin  user and password are auto created with mongo please login with credentials </p>
     </div>
   </div>
 </template>

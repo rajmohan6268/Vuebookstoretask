@@ -15,6 +15,8 @@ const setup = (store) => {
     }
   );
 
+  // refreh token not implemented as not in requiremts for this project task!
+
   axiosInstance.interceptors.response.use(
     (res) => {
       return res;
@@ -23,7 +25,6 @@ const setup = (store) => {
       const originalConfig = err.config;
 
       if (originalConfig.url !== "/auth/signin" && err.response) {
-        // Access Token was expired
         if (err.response.status === 401 && !originalConfig._retry) {
           originalConfig._retry = true;
 
