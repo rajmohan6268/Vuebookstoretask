@@ -257,15 +257,7 @@
 
             <tbody v-if="filteredorderr.length" class="border">
 
-              <div id="staggered-list-demo">
-  <transition-group
-    name="staggered-fade"
-    tag="ul"
-    v-bind:css="false"
-    v-on:before-enter="beforeEnter"
-    v-on:enter="enter"
-    v-on:leave="leave"
-  >
+
 
 
               <tr
@@ -293,7 +285,6 @@
                 <td class="w-1/6 truncate">{{ i.amount || "--" }}</td>
               </tr>
 
-              </transition-group>
             </tbody>
           </table>
         </div>
