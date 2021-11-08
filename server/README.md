@@ -5,6 +5,8 @@ project requires node v 12.22.1
 
 install dependicens by npm install or npm i
 
+np
+
 satart server ny npm start server listens in   port 3000
 
 allows request only in  (cors)    origin: "http://localhost:8080",  
