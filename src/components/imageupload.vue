@@ -74,8 +74,8 @@ export default {
 
         const fr = new FileReader();
         fr.readAsDataURL(files[0]);
-        fr.addEventListener("load", (result) => {
-          console.log(result, "result");
+        fr.addEventListener("load", () => {
+         // console.log(result, "result");
           this.url = fr.result;
           this.$emit("input", {
             url: this.url,

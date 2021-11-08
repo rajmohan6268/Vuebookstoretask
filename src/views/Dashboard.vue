@@ -45,7 +45,7 @@
         <button
           :class="currentTab == 'orders' ? 'active-tab ' : 'inacive-tab'"
           class="flex items-center px-8 py-2 space-x-3"
-          @click="currentTab = 'orders' ,showOrdersofBookName = ''"
+          @click="(currentTab = 'orders'), (showOrdersofBookName = '')"
         >
           <div class=""><img src="./../assets/orders.png" class="w-8" /></div>
           <div class="">
@@ -170,6 +170,7 @@
             </div>
           </div>
         </div>
+
         <div
           v-if="!Books.length & (currentTab == 'Inventory')"
           class="mx-auto my-40"
@@ -288,7 +289,15 @@
     <modal id="modal" v-if="show" @close="show = false">
       <template #header>
         <div
-          class="w-full 2x:p-4 p-2.5 text-xl font-medium bg-white border-b border-gray-200 "
+          class="
+            w-full
+            2x:p-4
+            p-2.5
+            text-xl
+            font-medium
+            bg-white
+            border-b border-gray-200
+          "
         >
           Add New Book
         </div>
@@ -469,7 +478,6 @@ import modal from "./../components/modal.vue";
 import imageupload from "./../components/imageupload.vue";
 import api from "./../services/api";
 
-
 const book = {
   title: "",
   image: "",
@@ -503,7 +511,7 @@ export default {
   },
   computed: {
     filteredorderr() {
-      console.log(this.orderdetails);
+      // console.log(this.orderdetails);
       if (this.showOrdersofBookName) {
         return this.orderdetails?.orders?.filter(
           (orders) => orders.book?._id == this.showOrdersofBookName
@@ -568,15 +576,13 @@ export default {
             amount: this.Books[this.activeBookindex].price * this.buyquantity,
             email: this.billingemail,
           })
-          .then((data) => {
+          .then(() => {
             this.getbooks();
             this.getorderdetails();
             this.showcartmodal = false;
             this.showBuyquantity = false;
             this.activeBookindex = null;
             this.buyquantity = 0;
-
-            console.log(data);
           })
           .catch((error) => {
             return error;
@@ -591,7 +597,6 @@ export default {
     },
 
     buy(id, index) {
-      console.log(id, index);
       if (this.activeBookindex == index) {
         this.showcartmodal = true;
       }
@@ -615,10 +620,8 @@ export default {
       let role = this.user?.roles;
 
       if (role == "ROLE_ADMIN") {
-        console.log(_id, intent, "________________");
         this.activeBookindex = index;
         if (intent == "dec") {
-          console.log(this.Books[this.activeBookindex].quantity > 0);
           if (this.Books[this.activeBookindex].quantity > 0) {
             this.increaseOrDecriseQuantity(_id, intent);
           }
@@ -641,8 +644,6 @@ export default {
         } else if (this.buyquantity > 0) {
           this.buyquantity = this.buyquantity - 1;
         }
-
-        console.log("user", index);
       }
     },
     increaseOrDecriseQuantity(_id, intent) {
@@ -678,8 +679,7 @@ export default {
     addBook() {
       api
         .post("/users/admin/books", this.book)
-        .then((data) => {
-          console.log(data);
+        .then(() => {
           this.show = false;
           this.book = JSON.parse(JSON.stringify(book));
           this.getbooks();
@@ -691,8 +691,6 @@ export default {
     },
 
     uploadedimg(e) {
-      console.log(e);
-      console.log(e, "emited");
       this.book.image = e.url;
     },
   },

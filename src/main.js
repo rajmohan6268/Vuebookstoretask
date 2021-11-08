@@ -47,8 +47,7 @@ app.component("font-awesome-icon", FontAwesomeIcon);
 app.mount("#app");
 
 app.directive("changedateformat", {
-  mounted(el, binding) {
-    console.log(binding.value);
+  mounted(el) {
     el.innerHTML = new Date(el.innerText).toLocaleString();
   },
 });

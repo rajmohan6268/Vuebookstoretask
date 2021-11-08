@@ -35,12 +35,12 @@ export default {
       this.message = "";
     },
     signup(user) {
-      console.log({ user }, "signup");
+    //  console.log({ user }, "signup");
       this.loading = true;
 
       this.$store.dispatch("auth/register", user).then(
         (data) => {
-          console.log(data, "registerd");
+      //    console.log(data, "registerd");
 
           this.message = data.message;
 
