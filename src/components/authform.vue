@@ -13,7 +13,8 @@
       </div>
       <label class="text-lg font-medium">Username </label>
       <input
-        @input="cleardefault()"
+        @input="cleardefault()" 
+        v-focus
         autocomplete="username"
         class="w-full p-2 border"
         type="text"

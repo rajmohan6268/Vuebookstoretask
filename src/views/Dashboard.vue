@@ -1,7 +1,8 @@
 <template>
   <div class="mx-auto overflow-hidden 2xl:container">
-
-    <div class="items-center justify-between p-2 mb-4 bg-gray-100 lg:p-4 md:p-3 2xl:mb-10 md:flex text-title">
+    <div
+      class="items-center justify-between p-2 mb-4 bg-gray-100 lg:p-4 md:p-3 2xl:mb-10 md:flex text-title"
+    >
       <div class="text-lg font-bold text-left lg:text-2xl">
         {{ user?.roles[0] === "ROLE_USER" ? "User" : "Admin" }}
         Dashboard
@@ -12,9 +13,10 @@
           <img
             src="https://icons.iconarchive.com/icons/papirus-team/papirus-status/512/avatar-default-icon.png"
             class="w-8 xl:w-12"
-          /> <div class="mx-2 xl:mx-4">{{ user?.username }}</div>
+          />
+          <div class="mx-2 xl:mx-4">{{ user?.username }}</div>
         </div>
-       
+
         <button
           @click="logOut()"
           class="px-2 py-1 text-xl font-medium text-red-500 bg-white shadow-sm xl:py-2 xl:px-8"
@@ -25,7 +27,7 @@
     </div>
 
     <div
-      class="transition-all duration-1000 ease-in-out border border-gray-100 xl:p-4 "
+      class="transition-all duration-1000 ease-in-out border border-gray-100 xl:p-4"
     >
       <div
         class="space-x-5 text-lg font-semibold border-b-2 border-gray-200 fx-i tetx-sec"
@@ -58,7 +60,9 @@
       <div class="" v-if="currentTab == 'Inventory'">
         <div class="mx-2 my-5 md:justify-between md:flex xl:my-10 xl:mx-4">
           <div class="items-center w-full max-w-xl md:flex">
-            <div class="mr-12 text-2xl font-semibold text-left text-title">Books</div>
+            <div class="mr-12 text-2xl font-semibold text-left text-title">
+              Books
+            </div>
             <div class="relative justify-start w-full fx-i">
               <button class="absolute mx-4">
                 <font-awesome-icon class="mr-2" icon="search" />
@@ -110,7 +114,9 @@
                   <div class="text-sm font-medium">
                     Author : {{ book.author }}
                   </div>
-                  <div class=""> <span class="text-green-500">price : </span>{{ book.price }}</div>
+                  <div class="">
+                    <span class="text-green-500">price : </span>{{ book.price }}
+                  </div>
                 </div>
 
                 <div class="">
@@ -122,7 +128,9 @@
               </div>
             </div>
 
-            <div class="justify-between max-w-sm md:space-x-3 fx-i md:max-w-none md:justify-start">
+            <div
+              class="justify-between max-w-sm md:space-x-3 fx-i md:max-w-none md:justify-start"
+            >
               <div class="text-xl font-medium md:text-2xl">Available:</div>
               <div class="px-4 py-2 text-xl font-bold">{{ book.quantity }}</div>
               <div class="space-x-3 text-xl fx-i">
@@ -187,7 +195,9 @@
       <!--  -->
 
       <div v-if="currentTab == 'orders'" class="w-full mt-10 text-left">
-        <div class="items-center px-2 mb-4 md:px-4 xl:space-x-8 xl:flex xl:px-0">
+        <div
+          class="items-center px-2 mb-4 md:px-4 xl:space-x-8 xl:flex xl:px-0"
+        >
           <div class="max-w-sm text-2xl font-semibold">
             Total orders: ({{ orderdetails?.orders?.length }})
           </div>
@@ -232,46 +242,62 @@
           </div>
         </div>
         <div class="overflow-x-scroll overscroll-none">
-   <table class="w-full border lg:table-fixed ">
-          <thead class="w-full">
-            <tr class="text-center divide-x">
-              <!-- <th class="w-4 ">S.No</th> -->
-              <th class="w-1/6 p-4 mwt">Order Id</th>
-              <th class="w-1/6 mwt">Buyer email</th>
-              <th class="w-1/6 mwt">Book Name</th>
-              <th class="w-1/6 mwt">Quantity</th>
-              <th class="w-1/6 mwt-md">Order Date/Time</th>
-              <th class="w-1/6 mwt" >Total amount</th>
-            </tr>
-          </thead>
+          <table class="w-full border lg:table-fixed">
+            <thead class="w-full">
+              <tr class="text-center divide-x">
+                <!-- <th class="w-4 ">S.No</th> -->
+                <th class="w-1/6 p-4 mwt">Order Id</th>
+                <th class="w-1/6 mwt">Buyer email</th>
+                <th class="w-1/6 mwt">Book Name</th>
+                <th class="w-1/6 mwt">Quantity</th>
+                <th class="w-1/6 mwt-md">Order Date/Time</th>
+                <th class="w-1/6 mwt">Total amount</th>
+              </tr>
+            </thead>
 
-          <tbody v-if="filteredorderr.length" class="border">
-            <tr
-              v-for="(i, index) in filteredorderr"
-              :key="index"
-              class="text-center divide-x"
-            >
-              <!-- <th class="w-4">{{index+1}}</th> -->
-              <td class="w-1/6 p-4 text-left truncate">{{ i._id || "--" }}</td>
-              <td class="w-1/6 truncate">{{ i.email || "" }}</td>
-              <td class="w-1/6 truncate">
-                <span v-if="i.book">{{ i.book.title }}</span>
-                <span v-highlight="'red '" v-else> book deleted </span>
-              </td>
+            <tbody v-if="filteredorderr.length" class="border">
 
-              <td class="w-1/6 truncate">{{ i.quantity || "--" }}</td>
-              <td v-changedateformat="" class="w-1/6 truncate">
-                {{ i.createdAt || "--" }}
+              <div id="staggered-list-demo">
+  <transition-group
+    name="staggered-fade"
+    tag="ul"
+    v-bind:css="false"
+    v-on:before-enter="beforeEnter"
+    v-on:enter="enter"
+    v-on:leave="leave"
+  >
 
-                <!-- {{ i.createdAt.substr(0, 10) || "--" }} -->
-              </td>
 
-              <td class="w-1/6 truncate">{{ i.amount || "--" }}</td>
-            </tr>
-          </tbody>
-        </table>
+              <tr
+                v-for="(i, index) in filteredorderr"
+                :key="index"
+                class="text-center divide-x"
+              >
+                <!-- <th class="w-4">{{index+1}}</th> -->
+                <td class="w-1/6 p-4 text-left truncate">
+                  {{ i._id || "--" }}
+                </td>
+                <td class="w-1/6 truncate">{{ i.email || "" }}</td>
+                <td class="w-1/6 truncate">
+                  <span v-if="i.book">{{ i.book.title }}</span>
+                  <span v-highlight="'red '" v-else> book deleted </span>
+                </td>
+
+                <td class="w-1/6 truncate">{{ i.quantity || "--" }}</td>
+                <td v-changedateformat="" class="w-1/6 truncate">
+                  {{ i.createdAt || "--" }}
+
+                  <!-- {{ i.createdAt.substr(0, 10) || "--" }} -->
+                </td>
+
+                <td class="w-1/6 truncate">{{ i.amount || "--" }}</td>
+              </tr>
+
+              </transition-group>
+            </tbody>
+          </table>
         </div>
-     
+
         <div
           v-if="!filteredorderr.length"
           class="w-full py-20 mx-auto text-center"
@@ -308,6 +334,7 @@
           <div class="fx-col">
             <label>Title </label>
             <input
+              v-focus
               v-model="book.title"
               class="p-2 border"
               type="text"
@@ -319,6 +346,7 @@
           <div class="fx-col">
             <label>Author Name </label>
             <input
+            
               v-model="book.author"
               class="p-2 border"
               type="text"
@@ -364,7 +392,7 @@
               />
             </div>
           </div>
-<!-- 
+          <!-- 
           <div class="xl:hidden fx-col">
             <label>image </label>
 
@@ -418,9 +446,9 @@
         </div>
       </template>
       <template #body>
-        <div class="justify-between p-4 mt-8 md:items-center md:flex ">
+        <div class="justify-between p-4 mt-8 md:items-center md:flex">
           <div class="cart-text">
-            <div class="fsm-lg">Book name </div>
+            <div class="fsm-lg">Book name</div>
             <div class="">
               {{ Books[activeBookindex].title }}
             </div>
@@ -434,7 +462,7 @@
               </div>
             </div>
             <div class="cart-text">
-              <div class=" fsm-lg">Total Amount</div>
+              <div class="fsm-lg">Total Amount</div>
               <div class="text-2xl font-semibold">
                 {{ Books[activeBookindex].price * buyquantity }}
               </div>
@@ -450,7 +478,7 @@
           <label class="mb-2">Billing email </label>
 
           <input
-            min="0"
+            min="0"   v-focus
             v-model="billingemail"
             class="p-2 border"
             type="email"
@@ -639,10 +667,11 @@ export default {
 
         if (
           (intent == "inc") &
-          (this.Books[this.activeBookindex].quantity > 0)& (this.Books[this.activeBookindex].quantity> this.buyquantity )
+          (this.Books[this.activeBookindex].quantity > 0) &
+          (this.Books[this.activeBookindex].quantity > this.buyquantity)
         ) {
           this.buyquantity = this.buyquantity + 1;
-        } else if (intent == "dec"&this.buyquantity > 0) {
+        } else if ((intent == "dec") & (this.buyquantity > 0)) {
           this.buyquantity = this.buyquantity - 1;
         }
       }

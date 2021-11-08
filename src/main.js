@@ -59,6 +59,11 @@ app.directive("highlight", {
     el.style.color = "#fff";
   },
 });
+app.directive('focus', {
+  mounted: function (el) {
+    el.focus()
+  }
+})
 
 
 
