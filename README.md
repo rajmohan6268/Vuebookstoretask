@@ -22,3 +22,10 @@ from root folder to
 
 
 # node backend is inside server folder in folder ./server its a individaul node project run seperately 
+
+
+if any issue ping at rajmohan6268@gmail.com
+
+ 
+
+ phone:909490846
