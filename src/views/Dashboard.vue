@@ -1,40 +1,38 @@
 <template>
-  <div class="mx-auto 2xl:container">
-    <!-- <button @click="show = !show">toggle</button> -->
-    <!-- {{ user }} -->
-    <!-- {{filteredorderr}} -->
-    <div class="p-4 mb-4 bg-gray-100 2xl:mb-10 fx-i-jb text-title">
-      <div class="text-2xl font-bold">
+  <div class="mx-auto overflow-hidden 2xl:container">
+
+    <div class="items-center justify-between p-2 mb-4 bg-gray-100 lg:p-4 md:p-3 2xl:mb-10 md:flex text-title">
+      <div class="text-lg font-bold text-left lg:text-2xl">
         {{ user?.roles[0] === "ROLE_USER" ? "User" : "Admin" }}
         Dashboard
       </div>
 
-      <div class="fx-i">
-        <div class="">
+      <div class="flex items-center justify-between max-w-sm lg:max-w-none">
+        <div class="fx-i">
           <img
             src="https://icons.iconarchive.com/icons/papirus-team/papirus-status/512/avatar-default-icon.png"
-            class="w-12"
-          />
+            class="w-8 xl:w-12"
+          /> <div class="mx-2 xl:mx-4">{{ user?.username }}</div>
         </div>
-        <div class="mx-4">{{ user?.username }}</div>
+       
         <button
           @click="logOut()"
-          class="px-8 py-2 text-xl font-medium text-red-500 bg-white shadow-sm"
+          class="px-2 py-1 text-xl font-medium text-red-500 bg-white shadow-sm xl:py-2 xl:px-8"
         >
-          <font-awesome-icon class="mr-2" icon="sign-out-alt" /> logout
+          <font-awesome-icon class="mr-1 xl:mr-2" icon="sign-out-alt" /> logout
         </button>
       </div>
     </div>
 
     <div
-      class="p-4 transition-all duration-1000 ease-in-out border border-gray-100 "
+      class="transition-all duration-1000 ease-in-out border border-gray-100 xl:p-4 "
     >
       <div
         class="space-x-5 text-lg font-semibold border-b-2 border-gray-200 fx-i tetx-sec"
       >
         <button
           :class="currentTab == 'Inventory' ? 'active-tab' : 'inacive-tab'"
-          class="flex items-center px-8 py-2 space-x-3"
+          class="flex items-center px-4 py-1.5 space-x-3 xl:px-8 xl:py-2"
           @click="(currentTab = 'Inventory'), (searchterm = '')"
         >
           <div class="">
@@ -44,11 +42,11 @@
         </button>
         <button
           :class="currentTab == 'orders' ? 'active-tab ' : 'inacive-tab'"
-          class="flex items-center px-8 py-2 space-x-3"
+          class="flex items-center px-4 py-1.5 space-x-3 xl:py-2 xl:px-8"
           @click="(currentTab = 'orders'), (showOrdersofBookName = '')"
         >
           <div class=""><img src="./../assets/orders.png" class="w-8" /></div>
-          <div class="">
+          <div class="flex items-center">
             Orders
             <span class="rounded-full fx-i-jc -right-4 -top-4">
               ({{ orderdetails?.orders?.length }})
@@ -58,9 +56,9 @@
       </div>
       <!-- inventory -->
       <div class="" v-if="currentTab == 'Inventory'">
-        <div class="flex justify-between mx-4 my-10">
-          <div class="w-full max-w-xl fx-i">
-            <div class="mr-12 text-2xl font-semibold text-title">Books</div>
+        <div class="mx-2 my-5 md:justify-between md:flex xl:my-10 xl:mx-4">
+          <div class="items-center w-full max-w-xl md:flex">
+            <div class="mr-12 text-2xl font-semibold text-left text-title">Books</div>
             <div class="relative justify-start w-full fx-i">
               <button class="absolute mx-4">
                 <font-awesome-icon class="mr-2" icon="search" />
@@ -81,7 +79,7 @@
             <button
               v-if="user?.roles[0] === 'ROLE_ADMIN'"
               @click="showaddbook()"
-              class="px-4 py-2 text-white bg-gray-100 rounded-sm shadow blue"
+              class="px-4 py-2 m-2 text-white bg-gray-100 rounded-sm shadow blue"
             >
               <font-awesome-icon class="mr-2" icon="plus" /> Add New Book
             </button>
@@ -93,50 +91,50 @@
           <div
             v-for="(book, index) in Books"
             :key="index"
-            class="justify-between p-3 border border-gray-200 rounded-lg hover:shadow hover:border-gray-200 fx-i"
+            class="items-center p-3 border border-gray-200 rounded-lg lg:justify-between hover:shadow hover:border-gray-200 lg:flex"
           >
-            <div class="flex">
-              <div class="w-40">
+            <div class="md:flex">
+              <div class="flex-shrink-0 w-40">
                 <!-- :src="https://cdn.elearningindustry.com/wp-content/uploads/2016/05/top-10-books-every-college-student-read-1024x640.jpeg" -->
 
                 <img :src="book.image" class="w-48 rounded-lg" />
               </div>
 
               <div
-                class="flex flex-col justify-around ml-8 font-bold text-left"
+                class="flex-col justify-around w-full ml-2 font-bold text-left md:flex md:ml-8"
               >
-                <div class="space-x-5 text-lg fx-i">
-                  <div class="max-w-md truncate">
+                <div class="items-center text-lg md:flex md:space-x-5">
+                  <div class="truncate md:max-w-md">
                     Book Title:{{ book.title }}
                   </div>
                   <div class="text-sm font-medium">
                     Author : {{ book.author }}
                   </div>
-                  <div class="">price : {{ book.price }}</div>
+                  <div class=""> <span class="text-green-500">price : </span>{{ book.price }}</div>
                 </div>
 
                 <div class="">
                   Description:
-                  <div class="h-10 max-w-3xl text-sm font-normal truncate">
+                  <div class="max-w-3xl text-sm font-normal truncate md:h-10">
                     {{ book.description }}
                   </div>
                 </div>
               </div>
             </div>
 
-            <div class="space-x-3 fx-i">
-              <div class="text-2xl font-medium">Available:</div>
+            <div class="justify-between max-w-sm md:space-x-3 fx-i md:max-w-none md:justify-start">
+              <div class="text-xl font-medium md:text-2xl">Available:</div>
               <div class="px-4 py-2 text-xl font-bold">{{ book.quantity }}</div>
               <div class="space-x-3 text-xl fx-i">
                 <button
                   @click="quantity(book._id, 'inc', index)"
-                  class="w-12 h-12 border rounded-full shadow hover:bg-green-50 hover:text-green-600"
+                  class="btn-q hover:bg-green-50 hover:text-green-600"
                 >
                   <font-awesome-icon icon="plus" />
                 </button>
                 <button
                   @click="quantity(book._id, 'dec', index)"
-                  class="w-12 h-12 border rounded-full shadow hover:bg-red-50 hover:text-red-600"
+                  class="btn-q hover:bg-red-50 hover:text-red-600"
                 >
                   <font-awesome-icon icon="minus" />
                 </button>
@@ -144,7 +142,7 @@
               <button
                 v-if="user?.roles[0] === 'ROLE_USER'"
                 @click="buy(book._id, index)"
-                class="px-6 py-2 text-white"
+                class="ml-2 text-white md:px-6 px-4 py-1.5 md:py-2 md:ml-0"
                 :class="
                   (activeBookindex === index) & (showBuyquantity > 0)
                     ? 'blue '
@@ -189,7 +187,7 @@
       <!--  -->
 
       <div v-if="currentTab == 'orders'" class="w-full mt-10 text-left">
-        <div class="flex items-center mb-4 space-x-8">
+        <div class="items-center px-2 mb-4 md:px-4 xl:space-x-8 xl:flex xl:px-0">
           <div class="max-w-sm text-2xl font-semibold">
             Total orders: ({{ orderdetails?.orders?.length }})
           </div>
@@ -227,22 +225,23 @@
             <button
               :class="showOrdersofBookName == '' ? ' hidden' : ' bg-red-500'"
               @click="showOrdersofBookName = ''"
-              class="px-4 py-2 ml-4 font-bold text-white"
+              class="px-4 py-2 mt-4 ml-4 font-bold text-white xl:mt-0"
             >
               clear select filter
             </button>
           </div>
         </div>
-        <table class="w-full border table-fixed">
+        <div class="overflow-x-scroll overscroll-none">
+   <table class="w-full border lg:table-fixed ">
           <thead class="w-full">
             <tr class="text-center divide-x">
               <!-- <th class="w-4 ">S.No</th> -->
-              <th class="w-1/6 p-4">Order Id</th>
-              <th class="w-1/6">Buyer email</th>
-              <th class="w-1/6">Book Name</th>
-              <th class="w-1/6">Quantity</th>
-              <th class="w-1/6">Order Date/Time</th>
-              <th class="w-1/6">Total amount</th>
+              <th class="w-1/6 p-4 mwt">Order Id</th>
+              <th class="w-1/6 mwt">Buyer email</th>
+              <th class="w-1/6 mwt">Book Name</th>
+              <th class="w-1/6 mwt">Quantity</th>
+              <th class="w-1/6 mwt-md">Order Date/Time</th>
+              <th class="w-1/6 mwt" >Total amount</th>
             </tr>
           </thead>
 
@@ -271,6 +270,8 @@
             </tr>
           </tbody>
         </table>
+        </div>
+     
         <div
           v-if="!filteredorderr.length"
           class="w-full py-20 mx-auto text-center"
@@ -337,7 +338,7 @@
               rows="4"
             />
           </div>
-          <div class="grid grid-cols-2 gap-4">
+          <div class="grid-cols-2 gap-4 md:grid">
             <div class="fx-col">
               <label>Price </label>
 
@@ -363,7 +364,7 @@
               />
             </div>
           </div>
-
+<!-- 
           <div class="xl:hidden fx-col">
             <label>image </label>
 
@@ -392,7 +393,7 @@
               />
             </div>
           </div>
-          {{ img }}
+          {{ img }} -->
           <imageupload @input="uploadedimg($event)" v-model="book.image" />
         </div>
       </template>
@@ -417,23 +418,23 @@
         </div>
       </template>
       <template #body>
-        <div class="p-4 mt-8 fx-i-jb">
-          <div class="">
-            <div class="fsm-lg">Book name</div>
+        <div class="justify-between p-4 mt-8 md:items-center md:flex ">
+          <div class="cart-text">
+            <div class="fsm-lg">Book name </div>
             <div class="">
               {{ Books[activeBookindex].title }}
             </div>
           </div>
 
-          <div class="space-x-10 text-center fx-i">
-            <div class="">
+          <div class="md:text-center md:space-x-10 md:items-center md:flex">
+            <div class="cart-text">
               <div class="fsm-lg">Price * quantity</div>
               <div class="">
                 {{ Books[activeBookindex].price }} * {{ buyquantity }}
               </div>
             </div>
-            <div class="">
-              <div class="fsm-lg">Total Amount</div>
+            <div class="cart-text">
+              <div class=" fsm-lg">Total Amount</div>
               <div class="text-2xl font-semibold">
                 {{ Books[activeBookindex].price * buyquantity }}
               </div>

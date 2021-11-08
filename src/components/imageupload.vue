@@ -60,7 +60,10 @@ export default {
       this.fileName = "";
       this.previewUrl = "";
       this.url = "";
-      this.$forceUpdate();
+      
+        this.$emit("input", {
+            url: null,
+          });
     },
     onFilePicked(event) {
       const files = event.target.files;

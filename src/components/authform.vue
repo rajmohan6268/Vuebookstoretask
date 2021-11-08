@@ -77,7 +77,7 @@
       <p class="mt-4 text-center text-red-500">{{ message }}</p>
     </div>
 
-    <div class="w-full text-xs text-center xl:absolute bottom-2">
+    <div class="w-full p-2 text-xs text-center xl:absolute bottom-2">
       <p class="text-red-500">Note: * admin  user and password are auto created with mongo please login with credentials  <br>
       password minimun character validation relaxed for admin  as default (credentials  mentioned in document)! 
       </p>
@@ -163,14 +163,14 @@ export default {
           username: this.form.username,
           password: this.form.password,
         });
-        console.log("sucess");
+    //    console.log("sucess");
       }
-      console.log(
-        "failed",
-        this.form,
-        this.passwordValidation,
-        this.usernameValidation
-      );
+      // console.log(
+      //   "failed",
+      //   this.form,
+      //   this.passwordValidation,
+      //   this.usernameValidation
+      // );
 
       //   setTimeout(() => {
       //     this.submitted = false;
