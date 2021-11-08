@@ -9,7 +9,13 @@ const app = express();
 var corsOptions = {
   origin: "http://localhost:8080",
 };
-
+app.use(bodyParser.json({ limit: "50mb" }));
+app.use(
+  bodyParser.urlencoded({
+    limit: "50mb",
+    extended: false,
+  })
+);
 app.use(cors(corsOptions));
 
 app.use(bodyParser.json());
