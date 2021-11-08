@@ -540,7 +540,6 @@ export default {
   },
   mounted() {
     this.getbooks();
-
     this.getorderdetails();
   },
   methods: {
