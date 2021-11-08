@@ -23,9 +23,16 @@ yarn lint
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
+#to run 
+
+```
+yarn install
+```
+yarn serve
+```
 
 
-#start ad port 8080 only 8080 port allowed in backend incase of face cors issues changes port in server/index.js line  no 10 with your port for clinet vue app
+#app starts at port 8080 only 8080 port allowed in backend incase of you face cors issues change port in server/index.js line  no 10 with your port for clinet vue app
 
 # change api base url in  
 from root folder to
