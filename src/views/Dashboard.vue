@@ -99,7 +99,6 @@
           >
             <div class="md:flex">
               <div class="flex-shrink-0 w-40">
-                <!-- :src="https://cdn.elearningindustry.com/wp-content/uploads/2016/05/top-10-books-every-college-student-read-1024x640.jpeg" -->
 
                 <img :src="book.image" class="w-48 rounded-lg" />
               </div>
@@ -203,19 +202,6 @@
           </div>
 
           <div v-if="user?.roles[0] === 'ROLE_ADMIN'" class="flex-grow">
-            <!-- <input  v-model="showOrdersofBookName"
-              class="w-full max-w-md p-2 border border-gray-300 "
-              list="browsers"
-              placeholder="select book"
-              name="browser"
-              id="browser"
-            />
-            <datalist id="browsers">
-                  <option  class="text-black"  v-for="(book, index) in Books"
-            :key="index" :value="book.title" >{{book.title}}</option>
-
-            </datalist> -->
-            <!-- {{filteredorderr}} -->
             <select
               v-model="showOrdersofBookName"
               aria-placeholder="select"
@@ -256,10 +242,6 @@
             </thead>
 
             <tbody v-if="filteredorderr.length" class="border">
-
-
-
-
               <tr
                 v-for="(i, index) in filteredorderr"
                 :key="index"
@@ -284,7 +266,6 @@
 
                 <td class="w-1/6 truncate">{{ i.amount || "--" }}</td>
               </tr>
-
             </tbody>
           </table>
         </div>
@@ -337,7 +318,6 @@
           <div class="fx-col">
             <label>Author Name </label>
             <input
-            
               v-model="book.author"
               class="p-2 border"
               type="text"
@@ -383,36 +363,7 @@
               />
             </div>
           </div>
-          <!-- 
-          <div class="xl:hidden fx-col">
-            <label>image </label>
 
-            <div
-              class="relative flex flex-col items-center px-6 pt-5 pb-6 mt-1 border-2 border-gray-300 border-dashed rounded-md "
-            >
-              <svg
-                class="w-24 h-24 mx-auto text-gray-400"
-                stroke="currentColor"
-                fill="none"
-                viewBox="0 0 48 48"
-                aria-hidden="true"
-              >
-                <path
-                  d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                ></path>
-              </svg>
-              click here to upload file
-              <input
-                class="absolute block w-full h-full opacity-0"
-                type="file"
-                placeholder="upload mage"
-              />
-            </div>
-          </div>
-          {{ img }} -->
           <imageupload @input="uploadedimg($event)" v-model="book.image" />
         </div>
       </template>
@@ -461,15 +412,13 @@
           </div>
         </div>
 
-        <!-- <div class="w-full p-6 my-3">
-        
-        </div> -->
 
         <div class="p-4 fx-col">
           <label class="mb-2">Billing email </label>
 
           <input
-            min="0"   v-focus
+            min="0"
+            v-focus
             v-model="billingemail"
             class="p-2 border"
             type="email"

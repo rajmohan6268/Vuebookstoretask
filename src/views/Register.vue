@@ -20,28 +20,16 @@ export default {
       message: "",
     };
   },
-  computed: {
-    // loggedIn() {
-    //   return this.$store.state.auth.status.loggedIn;
-    // },
-  },
-  created() {
-    // if (this.loggedIn) {
-    //   this.$router.push("/loginn");
-    // }
-  },
+
   methods: {
     clearmessage() {
       this.message = "";
     },
     signup(user) {
-    //  console.log({ user }, "signup");
       this.loading = true;
 
       this.$store.dispatch("auth/register", user).then(
         (data) => {
-      //    console.log(data, "registerd");
-
           this.message = data.message;
 
           setTimeout(() => {

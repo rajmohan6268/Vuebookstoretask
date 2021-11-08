@@ -1,7 +1,7 @@
 <template>
   <div class="w-full">
     <div
-      class="flex flex-col w-full max-w-md p-8 mx-auto text-left border shadow-sm 2xl:my-10 "
+      class="flex flex-col w-full max-w-md p-8 mx-auto text-left border shadow-sm 2xl:my-10"
     >
       <div
         class="justify-center mb-4 text-2xl font-bold text-center fx-i text-title"
@@ -13,7 +13,7 @@
       </div>
       <label class="text-lg font-medium">Username </label>
       <input
-        @input="cleardefault()" 
+        @input="cleardefault()"
         v-focus
         autocomplete="username"
         class="w-full p-2 border"
@@ -79,8 +79,11 @@
     </div>
 
     <div class="w-full p-2 text-xs text-center xl:absolute bottom-2">
-      <p class="text-red-500">Note: * admin  user and password are auto created with mongo please login with credentials  <br>
-      password minimun character validation relaxed for admin  as default (credentials  mentioned in document)! 
+      <p class="text-red-500">
+        Note: * admin user and password are auto created with mongo please login
+        with credentials <br />
+        password minimun character validation relaxed for admin as default
+        (credentials mentioned in document)!
       </p>
     </div>
   </div>
@@ -164,19 +167,7 @@ export default {
           username: this.form.username,
           password: this.form.password,
         });
-    //    console.log("sucess");
       }
-      // console.log(
-      //   "failed",
-      //   this.form,
-      //   this.passwordValidation,
-      //   this.usernameValidation
-      // );
-
-      //   setTimeout(() => {
-      //     this.submitted = false;
-      //     this.form = JSON.parse(JSON.stringify(form));
-      //   }, 5000);
     },
   },
 };
