@@ -39,4 +39,4 @@ from root folder to
 ./services/api.js   folder in file api.js   with api url of node backend 
 
 
-# node backend is inside server folder in folder ./server its a individaul node projecr run seperately 
+# node backend is inside server folder in folder ./server its a individaul node project run seperately 
