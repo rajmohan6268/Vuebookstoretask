@@ -1,7 +1,7 @@
 <template>
   <div class="w-full">
     <div
-      class="flex flex-col w-full max-w-md p-8 mx-auto my-10 text-left border shadow-sm "
+      class="flex flex-col w-full max-w-md p-8 mx-auto text-left border shadow-sm 2xl:my-10 "
     >
       <div
         class="justify-center mb-4 text-2xl font-bold text-center fx-i text-title"
@@ -77,8 +77,10 @@
       <p class="mt-4 text-center text-red-500">{{ message }}</p>
     </div>
 
-    <div class="">
-      <p class="text-red-500">Note: * admin  user and password are auto created with mongo please login with credentials </p>
+    <div class="w-full text-xs text-center xl:absolute bottom-2">
+      <p class="text-red-500">Note: * admin  user and password are auto created with mongo please login with credentials  <br>
+      password minimun character validation relaxed for admin  as default (credentials  mentioned in document)! 
+      </p>
     </div>
   </div>
 </template>

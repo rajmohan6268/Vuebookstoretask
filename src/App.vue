@@ -1,6 +1,6 @@
 <template>
 <div class="">
-    <div class="flex justify-center w-full my-10 space-x-4 text-lg font-semibold">
+    <div class="flex justify-center w-full my-5 space-x-4 text-lg font-semibold 2xl:my-10">
     <router-link to="/"> Home</router-link>
     <router-link to="/login">login</router-link>
     <router-link to="/Register">Register</router-link>

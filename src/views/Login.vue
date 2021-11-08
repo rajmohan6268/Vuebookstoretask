@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center justify-center mt-40">
+  <div class="flex items-center justify-center mt-28 2xl:mt-40">
     <authform :message="message" @clearmessage="clearmessage" @submit="login($event)"></authform>
   </div>
 </template>

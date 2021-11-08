@@ -3,7 +3,7 @@
     <!-- <button @click="show = !show">toggle</button> -->
     <!-- {{ user }} -->
     <!-- {{filteredorderr}} -->
-    <div class="p-4 mb-10 bg-gray-100 fx-i-jb text-title">
+    <div class="p-4 mb-4 bg-gray-100 2xl:mb-10 fx-i-jb text-title">
       <div class="text-2xl font-bold">
         {{ user?.roles[0] === "ROLE_USER" ? "User" : "Admin" }}
         Dashboard
@@ -45,7 +45,7 @@
         <button
           :class="currentTab == 'orders' ? 'active-tab ' : 'inacive-tab'"
           class="flex items-center px-8 py-2 space-x-3"
-          @click="currentTab = 'orders'"
+          @click="currentTab = 'orders' ,showOrdersofBookName = ''"
         >
           <div class=""><img src="./../assets/orders.png" class="w-8" /></div>
           <div class="">
@@ -288,13 +288,13 @@
     <modal id="modal" v-if="show" @close="show = false">
       <template #header>
         <div
-          class="w-full p-4 text-xl font-medium bg-white border-b border-gray-200 "
+          class="w-full 2x:p-4 p-2.5 text-xl font-medium bg-white border-b border-gray-200 "
         >
           Add New Book
         </div>
       </template>
       <template #body>
-        <div class="w-full p-6 space-y-3">
+        <div class="w-full p-6 space-y-1 2xl:space-y-3">
           <div class="fx-col">
             <label>Title </label>
             <input
@@ -468,7 +468,7 @@
 import modal from "./../components/modal.vue";
 import imageupload from "./../components/imageupload.vue";
 import api from "./../services/api";
-import "../index.css";
+
 
 const book = {
   title: "",
