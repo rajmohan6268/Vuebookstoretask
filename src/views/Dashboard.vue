@@ -1,8 +1,8 @@
 <template>
   <div class="mx-auto 2xl:container">
     <!-- <button @click="show = !show">toggle</button> -->
-    <!-- {{ user }}
-    {{ book }} -->
+    <!-- {{ user }} -->
+
     <div class="p-4 mb-10 bg-gray-100 fx-i-jb text-title">
       <div class="text-2xl font-bold">
         {{ user?.roles[0] === "ROLE_USER" ? "User" : "Admin" }}
@@ -30,12 +30,12 @@
       class="p-4 transition-all duration-1000 ease-in-out border border-gray-100 "
     >
       <div
-        class="space-x-5 text-lg font-semibold border-b-2 border-gray-200  fx-i tetx-sec"
+        class="space-x-5 text-lg font-semibold border-b-2 border-gray-200 fx-i tetx-sec"
       >
         <button
           :class="currentTab == 'Inventory' ? 'active-tab' : 'inacive-tab'"
           class="flex items-center px-8 py-2 space-x-3"
-          @click="(currentTab = 'Inventory'), getbbooks()"
+          @click="(currentTab = 'Inventory'), (searchterm = '')"
         >
           <div class="">
             <img src="./../assets/inventory.svg" class="w-8" />
@@ -45,7 +45,7 @@
         <button
           :class="currentTab == 'orders' ? 'active-tab ' : 'inacive-tab'"
           class="flex items-center px-8 py-2 space-x-3"
-          @click="(currentTab = 'orders'), getorderdetails()"
+          @click="currentTab = 'orders'"
         >
           <div class=""><img src="./../assets/orders.png" class="w-8" /></div>
           <div class="">
@@ -67,10 +67,11 @@
               </button>
 
               <input
-                @change="submitted = false"
+                debounce="1000"
+                v-model="searchterm"
                 class="w-full p-2 pl-10 text-black bg-gray-100 border rounded-md "
                 type="search"
-                placeholder=" search books"
+                placeholder=" search books by name"
                 name="search"
               />
             </div>
@@ -88,11 +89,11 @@
         </div>
 
         <!-- book card -->
-        <div class="space-y-3">
+        <div v-if="Books.length" class="space-y-3">
           <div
             v-for="(book, index) in Books"
             :key="index"
-            class="justify-between p-3 border border-gray-200 rounded-lg  hover:shadow hover:border-gray-200 fx-i"
+            class="justify-between p-3 border border-gray-200 rounded-lg hover:shadow hover:border-gray-200 fx-i"
           >
             <div class="flex">
               <div class="w-40">
@@ -127,13 +128,13 @@
               <div class="space-x-3 text-xl fx-i">
                 <button
                   @click="quantity(book._id, 'inc', index)"
-                  class="w-12 h-12 border rounded-full shadow  hover:bg-green-50 hover:text-green-600"
+                  class="w-12 h-12 border rounded-full shadow hover:bg-green-50 hover:text-green-600"
                 >
                   <font-awesome-icon icon="plus" />
                 </button>
                 <button
                   @click="quantity(book._id, 'dec', index)"
-                  class="w-12 h-12 border rounded-full shadow  hover:bg-red-50 hover:text-red-600"
+                  class="w-12 h-12 border rounded-full shadow hover:bg-red-50 hover:text-red-600"
                 >
                   <font-awesome-icon icon="minus" />
                 </button>
@@ -167,12 +168,39 @@
             </div>
           </div>
         </div>
+        <div
+          v-if="!Books.length & (currentTab == 'Inventory')"
+          class="mx-auto my-40"
+        >
+          <div class="">
+            <div class="">no books found with title {{ searchterm }} !</div>
+            <button
+              @click="(searchterm = ''), getbooks()"
+              class="px-4 py-2 mt-4 text-white blue"
+            >
+              show all books
+            </button>
+          </div>
+        </div>
       </div>
       <!--  -->
-      <div v-if="currentTab == 'orders'" class="mt-10 text-left">
-        <div class="mb-4 text-2xl font-semibold">
+      <div v-if="currentTab == 'orders'" class="w-full mt-10 text-left">
+<div class="flex items-center space-x-8">
+          <div class="max-w-sm mb-4 text-2xl font-semibold">
           Total orders: ({{ orderdetails?.orders?.length }})
         </div>
+<div v-if="user?.roles[0] === 'ROLE_ADMIN' " class="max-w-sm">
+    <div for="browser">Choose your browser from the list:</div>
+  <input list="browsers" name="browser" id="browser"/>
+  <datalist id="browsers">
+    <option value="Edge"/>
+    <option value="Edge"/>
+    <option value="Edge"/>
+    <option value="Edge"/>
+
+  </datalist>
+</div>
+</div>
         <table class="w-full border table-fixed">
           <thead class="w-full">
             <tr class="text-center divide-x">
@@ -185,7 +213,8 @@
               <th class="w-1/6">Total amount</th>
             </tr>
           </thead>
-          <tbody class="border">
+
+          <tbody v-if="orderdetails.orders.length" class="border">
             <tr
               v-for="(i, index) in orderdetails.orders"
               :key="index"
@@ -196,15 +225,32 @@
               <td class="w-1/6 truncate">{{ i.email || "" }}</td>
               <td class="w-1/6 truncate">
                 <span v-if="i.book">{{ i.book.title }}</span>
-                <span v-else class="p-1 bg-red-300"> book deleted </span>
+                <span v-highlight="'red '" v-else> book deleted </span>
               </td>
 
               <td class="w-1/6 truncate">{{ i.quantity || "--" }}</td>
-              <td class="w-1/6 truncate">{{ i.createdAt || "--" }}</td>
+              <td v-changedateformat="" class="w-1/6 truncate">
+                {{ i.createdAt || "--" }}
+
+                <!-- {{ i.createdAt.substr(0, 10) || "--" }} -->
+              </td>
+
               <td class="w-1/6 truncate">{{ i.amount || "--" }}</td>
             </tr>
           </tbody>
         </table>
+        <div
+          v-if="!orderdetails.orders.length"
+          class="w-full py-20 mx-auto text-center"
+        >
+          <div class="">no order found !</div>
+          <button
+            @click="currentTab = 'Inventory'"
+            class="px-4 py-2 mt-4 text-white blue"
+          >
+            order books
+          </button>
+        </div>
       </div>
     </div>
 
@@ -409,6 +455,7 @@ export default {
   },
   data() {
     return {
+      searchterm: "",
       billingemail: "",
       showBuyquantity: false,
       activeBookindex: null,
@@ -430,8 +477,23 @@ export default {
       return this.$store.state;
     },
   },
+
+  watch: {
+    currentTab(val) {
+      if (val === "Inventory") {
+        this.getbooks();
+      } else if (val === "orders") {
+        this.getorderdetails();
+      }
+    },
+    searchterm() {
+      setTimeout(() => {
+        this.getbooks(this.searchterm);
+      }, 800);
+    },
+  },
   mounted() {
-    this.getbbooks();
+    this.getbooks();
 
     this.getorderdetails();
   },
@@ -443,7 +505,7 @@ export default {
         api.get("/users/admin/orders").then((res) => {
           this.orderdetails = res.data;
         });
-      } else {
+      } else if (role == "ROLE_USER") {
         api.get("/users/orders/myorders").then((res) => {
           this.orderdetails = res.data;
         });
@@ -451,26 +513,32 @@ export default {
     },
 
     buybook() {
-      api
-        .post("/store/order", {
-          book: this.Books[this.activeBookindex],
-          quantity: this.buyquantity,
-          amount: this.Books[this.activeBookindex].price * this.buyquantity,
-          email: this.billingemail,
-        })
-        .then((data) => {
-          this.getbbooks();
-          this.getorderdetails();
-          this.showcartmodal = false;
-          this.showBuyquantity = false;
-          this.activeBookindex = null;
-          this.buyquantity = 0;
+      if (
+        /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(this.billingemail)
+      ) {
+        api
+          .post("/store/order", {
+            book: this.Books[this.activeBookindex],
+            quantity: this.buyquantity,
+            amount: this.Books[this.activeBookindex].price * this.buyquantity,
+            email: this.billingemail,
+          })
+          .then((data) => {
+            this.getbooks();
+            this.getorderdetails();
+            this.showcartmodal = false;
+            this.showBuyquantity = false;
+            this.activeBookindex = null;
+            this.buyquantity = 0;
 
-          console.log(data);
-        })
-        .catch((error) => {
-          return error;
-        });
+            console.log(data);
+          })
+          .catch((error) => {
+            return error;
+          });
+      } else {
+        window.alert("invalid email");
+      }
     },
     logOut() {
       this.$store.dispatch("auth/logout");
@@ -483,9 +551,14 @@ export default {
         this.showcartmodal = true;
       }
     },
-    getbbooks() {
+    getbooks(val) {
+      if (val) {
+        this.searchterm !== null ||
+          this.searchterm !== undefined ||
+          this.searchterm !== "";
+      }
       api
-        .get(`/store/getbooks`)
+        .get(`/store/getbooks?${"title=" + val}`)
         .then((data) => {
           this.Books = data.data;
         })
@@ -524,7 +597,7 @@ export default {
           }
         )
         .then(() => {
-          this.getbbooks();
+          this.getbooks();
         })
         .catch((error) => {
           return error;
@@ -535,7 +608,7 @@ export default {
       api
         .delete(`/users/admin/books/${_id}`)
         .then(() => {
-          this.getbbooks();
+          this.getbooks();
         })
         .catch((error) => {
           return error;
@@ -552,7 +625,7 @@ export default {
           console.log(data);
           this.show = false;
           this.book = JSON.parse(JSON.stringify(book));
-          this.getbbooks();
+          this.getbooks();
         })
 
         .catch((error) => {

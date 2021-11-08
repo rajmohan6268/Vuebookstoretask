@@ -6,7 +6,8 @@ import store from "./store";
 import setupInterceptors from "./services/setupInterceptors";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import {faShoppingCart,
+import {
+  faShoppingCart,
   faHome,
   faAd,
   faSignOutAlt,
@@ -34,12 +35,44 @@ library.add(
   faPhone,
   faTrash,
   faAd,
-  faPlus,faShoppingCart
+  faPlus,
+  faShoppingCart
 );
 setupInterceptors(store);
+const app = createApp(App);
 
-createApp(App)
-  .use(store)
-  .use(router)
-  .component("font-awesome-icon", FontAwesomeIcon)
-  .mount("#app");
+app.use(store);
+app.use(router);
+app.component("font-awesome-icon", FontAwesomeIcon);
+app.mount("#app");
+
+app.directive("changedateformat", {
+  mounted(el, binding) {
+    console.log(binding.value);
+    el.innerHTML = new Date(el.innerText).toLocaleString();
+  },
+});
+
+app.directive("highlight", {
+  mounted(el, binding) {
+    el.style.backgroundColor = binding.value ? binding.value : "#fff";
+    el.style.padding = "5px";
+    el.style.color = "#fff";
+  },
+});
+
+// app.mixin({
+//   methods: {
+//     debounce(func, delay=300) {
+//       let debounceTimer;
+//       return function() {
+//       console.log("debouncing call..");
+//         const context = this;
+//         const args = arguments;
+//         clearTimeout(debounceTimer);
+//         debounceTimer = setTimeout(() => func.apply(context, args), delay);
+//        console.log("..done");
+//       };
+//     }
+//   }
+// })

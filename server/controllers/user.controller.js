@@ -64,12 +64,12 @@ exports.myorders = async (req, res) => {
     });
   }
 
+  console.log(user);
+
   let id = user.data.user.id;
 
   Order.find({
-    where: {
-      orderedBy: id,
-    },
+    orderedBy: id,
   })
     .populate("book")
     .populate("orderedBy",{ username:1 ,_id:1 })

@@ -30,7 +30,6 @@ exports.makeOrder = async (req, res) => {
     order.save(order).then(async (data) => {
       console.log(data);
 
-
       _book.quantity = _book.quantity - quantity;
       _book
         .save(_book)
@@ -60,9 +59,25 @@ exports.makeOrder = async (req, res) => {
 };
 
 exports.getbooks = async (req, res) => {
-  const id = req.params.id;
+  //const id = req.query.search
 
-  Book.find({})
+  console.log(req.query, "search");
+
+  let q = req.query.title;
+
+  const searchterm = {};
+  if (
+    (q !== null) &
+    (q !== undefined) &
+    (q !== "") &
+    (q !== "undefined") &
+    (q !== "null") &
+    (!q == "")
+  ) {
+    searchterm.title = { $regex: q, $options: "i" };
+  }
+
+  Book.find(searchterm)
     .sort({ createdAt: -1 })
     .then((data) => {
       if (!data) {
@@ -74,7 +89,7 @@ exports.getbooks = async (req, res) => {
     .catch((err) => {
       res.status(500).send({
         sucess: false,
-        message: "Error retrieving Book with id=" + id,
+        message: "Error retrieving Books ",
         err,
       });
     });
