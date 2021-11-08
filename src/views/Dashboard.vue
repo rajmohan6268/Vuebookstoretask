@@ -639,10 +639,10 @@ export default {
 
         if (
           (intent == "inc") &
-          (this.Books[this.activeBookindex].quantity > 0)
+          (this.Books[this.activeBookindex].quantity > 0)& (this.Books[this.activeBookindex].quantity> this.buyquantity )
         ) {
           this.buyquantity = this.buyquantity + 1;
-        } else if (this.buyquantity > 0) {
+        } else if (intent == "dec"&this.buyquantity > 0) {
           this.buyquantity = this.buyquantity - 1;
         }
       }
