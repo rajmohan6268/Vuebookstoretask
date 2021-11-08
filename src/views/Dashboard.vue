@@ -2,7 +2,7 @@
   <div class="mx-auto 2xl:container">
     <!-- <button @click="show = !show">toggle</button> -->
     <!-- {{ user }} -->
-
+    <!-- {{filteredorderr}} -->
     <div class="p-4 mb-10 bg-gray-100 fx-i-jb text-title">
       <div class="text-2xl font-bold">
         {{ user?.roles[0] === "ROLE_USER" ? "User" : "Admin" }}
@@ -106,7 +106,9 @@
                 class="flex flex-col justify-around ml-8 font-bold text-left"
               >
                 <div class="space-x-5 text-lg fx-i">
-                  <div class="">Book Title:{{ book.title }}</div>
+                  <div class="max-w-md truncate">
+                    Book Title:{{ book.title }}
+                  </div>
                   <div class="text-sm font-medium">
                     Author : {{ book.author }}
                   </div>
@@ -184,23 +186,52 @@
         </div>
       </div>
       <!--  -->
-      <div v-if="currentTab == 'orders'" class="w-full mt-10 text-left">
-<div class="flex items-center space-x-8">
-          <div class="max-w-sm mb-4 text-2xl font-semibold">
-          Total orders: ({{ orderdetails?.orders?.length }})
-        </div>
-<div v-if="user?.roles[0] === 'ROLE_ADMIN' " class="max-w-sm">
-    <div for="browser">Choose your browser from the list:</div>
-  <input list="browsers" name="browser" id="browser"/>
-  <datalist id="browsers">
-    <option value="Edge"/>
-    <option value="Edge"/>
-    <option value="Edge"/>
-    <option value="Edge"/>
 
-  </datalist>
-</div>
-</div>
+      <div v-if="currentTab == 'orders'" class="w-full mt-10 text-left">
+        <div class="flex items-center mb-4 space-x-8">
+          <div class="max-w-sm text-2xl font-semibold">
+            Total orders: ({{ orderdetails?.orders?.length }})
+          </div>
+
+          <div v-if="user?.roles[0] === 'ROLE_ADMIN'" class="flex-grow">
+            <!-- <input  v-model="showOrdersofBookName"
+              class="w-full max-w-md p-2 border border-gray-300 "
+              list="browsers"
+              placeholder="select book"
+              name="browser"
+              id="browser"
+            />
+            <datalist id="browsers">
+                  <option  class="text-black"  v-for="(book, index) in Books"
+            :key="index" :value="book.title" >{{book.title}}</option>
+
+            </datalist> -->
+            <!-- {{filteredorderr}} -->
+            <select
+              v-model="showOrdersofBookName"
+              aria-placeholder="select"
+              name="select"
+              class="w-full max-w-2xl p-2 bg-white border border-gray-300 rounded-md "
+            >
+              <option value="" disabled>filter Order by Book Name</option>
+              <option
+                class="w-full"
+                v-for="(book, index) in Books"
+                :key="index"
+                :value="book._id"
+              >
+                {{ book.title }}
+              </option>
+            </select>
+            <button
+              :class="showOrdersofBookName == '' ? ' hidden' : ' bg-red-500'"
+              @click="showOrdersofBookName = ''"
+              class="px-4 py-2 ml-4 font-bold text-white"
+            >
+              clear select filter
+            </button>
+          </div>
+        </div>
         <table class="w-full border table-fixed">
           <thead class="w-full">
             <tr class="text-center divide-x">
@@ -214,9 +245,9 @@
             </tr>
           </thead>
 
-          <tbody v-if="orderdetails.orders.length" class="border">
+          <tbody v-if="filteredorderr.length" class="border">
             <tr
-              v-for="(i, index) in orderdetails.orders"
+              v-for="(i, index) in filteredorderr"
               :key="index"
               class="text-center divide-x"
             >
@@ -240,7 +271,7 @@
           </tbody>
         </table>
         <div
-          v-if="!orderdetails.orders.length"
+          v-if="!filteredorderr.length"
           class="w-full py-20 mx-auto text-center"
         >
           <div class="">no order found !</div>
@@ -463,6 +494,7 @@ export default {
       showcartmodal: false,
       show: false,
       currentTab: "Inventory",
+      showOrdersofBookName: "",
       img: null,
       book: JSON.parse(JSON.stringify(book)),
       Books: [],
@@ -470,6 +502,19 @@ export default {
     };
   },
   computed: {
+    filteredorderr() {
+      console.log(this.orderdetails);
+      if (this.showOrdersofBookName) {
+        return this.orderdetails?.orders?.filter(
+          (orders) => orders.book?._id == this.showOrdersofBookName
+        );
+      } else {
+        return this.orderdetails?.orders?.filter(
+          (orders) => orders.book?._id != null
+        );
+      }
+    },
+
     user() {
       return this.$store.state.auth.user;
     },
@@ -484,6 +529,7 @@ export default {
         this.getbooks();
       } else if (val === "orders") {
         this.getorderdetails();
+        this.getbooks();
       }
     },
     searchterm() {
@@ -570,7 +616,16 @@ export default {
       let role = this.user?.roles;
 
       if (role == "ROLE_ADMIN") {
-        this.increaseOrDecriseQuantity(_id, intent);
+        console.log(_id, intent, "________________");
+        this.activeBookindex = index;
+        if (intent == "dec") {
+          console.log(this.Books[this.activeBookindex].quantity > 0);
+          if (this.Books[this.activeBookindex].quantity > 0) {
+            this.increaseOrDecriseQuantity(_id, intent);
+          }
+        } else {
+          this.increaseOrDecriseQuantity(_id, intent);
+        }
       } else if (role == "ROLE_USER") {
         this.showBuyquantity = true;
 
@@ -579,7 +634,10 @@ export default {
         }
         this.activeBookindex = index;
 
-        if (intent == "inc") {
+        if (
+          (intent == "inc") &
+          (this.Books[this.activeBookindex].quantity > 0)
+        ) {
           this.buyquantity = this.buyquantity + 1;
         } else if (this.buyquantity > 0) {
           this.buyquantity = this.buyquantity - 1;
@@ -635,6 +693,8 @@ export default {
 
     uploadedimg(e) {
       console.log(e);
+      console.log(e, "emited");
+      this.book.image = e.url;
     },
   },
 };

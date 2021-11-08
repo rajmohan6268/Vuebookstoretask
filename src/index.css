@@ -28,6 +28,14 @@
   @apply text-lg font-semibold;
 }
 
+option{
+  
+  max-width: 28rem/* 448px */  !important;
+  overflow: hidden  !important;
+  text-overflow: ellipsis  !important;
+  white-space: nowrap  !important;
+
+}
  
 /* width */
 #modal ::-webkit-scrollbar {
