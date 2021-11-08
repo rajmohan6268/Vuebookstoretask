@@ -60,7 +60,7 @@ function initial() {
         name: "user",
       }).save((err) => {
         if (err) {
-          console.log("error", err);
+        //  console.log("error", err);
         }
 
         console.log("added 'user' to roles collection");
@@ -70,24 +70,24 @@ function initial() {
         name: "admin",
       }).save(async (err) => {
         if (err) {
-          console.log("error", err);
+         // console.log("error", err);
         }
 
-        let _admiindata = await Role.findOne({ name: "admin" });
+        let _admindata = await Role.findOne({ name: "admin" });
 
-        console.log("added 'admin' to roles collection", _admiindata);
+        console.log("added 'admin' to roles collection", _admindata);
 
-        console.log(_admiindata);
+       // console.log(_admindata);
 
         let passwod = bcrypt.hashSync("admin", 8);
 
         new User({
           username: "admin",
           password: passwod,
-          roles: _admiindata._id,
+          roles: _admindata._id,
         }).save((err) => {
           if (err) {
-            console.log("error", err);
+         console.log("error", err);
           }
 
           console.log("added 'admin' to users collection");
