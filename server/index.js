@@ -1,14 +1,15 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const cors = require("cors");
+const cors = require('cors')
 const dbConfig = require("./config/db.config");
 var bcrypt = require("bcryptjs");
 
 const app = express();
 
-var corsOptions = {
-  origin: "http://localhost:8080",
-};
+
+
+// allow cors requests from any origin and with credentials
+app.use(cors({ origin: (origin, callback) => callback(null, true), credentials: true }))
 
 
 app.use(bodyParser.json({ limit: "50mb" }));
@@ -18,7 +19,7 @@ app.use(
     extended: false,
   })
 );
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
 
 app.use(bodyParser.json());
 
