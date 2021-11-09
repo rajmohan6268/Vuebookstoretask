@@ -161,7 +161,7 @@ export default {
       this.submitted = true;
       if (
         this.passwordValidation.valid & this.usernameValidation.valid ||
-        this.form.username === "admin"
+        this.form.username === "admin"||   this.form.username === "Admin"
       ) {
         this.$emit("submit", {
           username: this.form.username,
