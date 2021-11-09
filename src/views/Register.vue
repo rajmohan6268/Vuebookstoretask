@@ -10,6 +10,9 @@
 
 <script>
 import authform from "../components/authform.vue";
+import { createToast } from "mosha-vue-toastify";
+
+import "mosha-vue-toastify/dist/style.css";
 export default {
   components: { authform },
   name: "register",
@@ -37,6 +40,12 @@ export default {
           }, 3000);
         },
         (error) => {
+          createToast(error.response.data.message, {
+            type: "info",
+            transition: "bounce",
+            showIcon: "true",
+            toastBackgroundColor: "red",
+          });
           this.loading = false;
           this.message =
             (error.response &&

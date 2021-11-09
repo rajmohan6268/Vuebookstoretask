@@ -1,11 +1,18 @@
 <template>
   <div class="flex items-center justify-center mt-28 2xl:mt-40">
-    <authform :message="message" @clearmessage="clearmessage" @submit="login($event)"></authform>
+    <authform
+      :message="message"
+      @clearmessage="clearmessage"
+      @submit="login($event)"
+    ></authform>
   </div>
 </template>
 
 <script>
 import authform from "../components/authform.vue";
+import { createToast } from "mosha-vue-toastify";
+
+import "mosha-vue-toastify/dist/style.css";
 export default {
   components: { authform },
   name: "login",
@@ -30,7 +37,7 @@ export default {
       this.message = "";
     },
     login(user) {
-      console.log({user});
+      console.log({ user });
       this.loading = true;
 
       this.$store.dispatch("auth/login", user).then(
@@ -39,6 +46,14 @@ export default {
         },
         (error) => {
           this.loading = false;
+
+          createToast(error.response.data.message, {
+            type: "info",
+            transition: "bounce",
+            showIcon: "true",
+            toastBackgroundColor: "red",
+          });
+
           this.message =
             (error.response &&
               error.response.data &&
