@@ -34,7 +34,12 @@ export default {
       this.$store.dispatch("auth/register", user).then(
         (data) => {
           this.message = data.message;
-
+          createToast("user created ", {
+            hideProgressBar: "true",
+            type: "success",
+            showIcon: "true",
+            transition: "zoom",
+          });
           setTimeout(() => {
             this.$router.push("/login");
           }, 3000);
