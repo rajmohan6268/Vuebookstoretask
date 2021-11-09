@@ -1,7 +1,7 @@
 # bookstore
 
-
-
+#vue app live link  https://bookstoretask-rajdev.netlify.app/
+#api link  https://rajdev-vuebookstoreapi.herokuapp.com/api
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
@@ -13,12 +13,24 @@ npm install
 npm start
 ```
 
+# to run in vue app in  local
+change api url in /sr/services/api.js or pase below code
+====================================================================
 
-#app starts at port 8080 only 8080 port allowed in backend incase of you face cors issues change port in server/index.js line  no 10 with your port for clinet vue app
+import axios from "axios";
 
-# change api base url in  
-from root folder to
-./services/api.js   folder in file api.js   with api url of node backend 
+const instance = axios.create({
+  baseURL: "http://localhost:3000/api",
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
+export default instance;
+
+
+========================================================================
+
 
 
 # node backend is inside server folder in folder ./server its a individaul node project run seperately 

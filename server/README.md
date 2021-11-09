@@ -7,10 +7,8 @@ install dependicens by npm install or npm i
 
 npm start or node index.js inside  server folder
 
-satart server ny npm start server listens in   port 3000
-
-allows request only in  (cors)    origin: "http://localhost:8080",  
-
+api live url 
+#https://rajdev-vuebookstoreapi.herokuapp.com/api
 # object store or multer  not used for image upload in difficulties to host in heroku  instead made it as base64
 require mongo db 
 
