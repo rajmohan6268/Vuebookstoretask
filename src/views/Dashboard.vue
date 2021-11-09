@@ -647,10 +647,16 @@ export default {
             hideProgressBar: "true",
           });
         } else {
-          createToast("unable to increase or decrease quantity", {
-            hideProgressBar: "true",
-            type: "warning",
-          });
+          createToast(
+            {
+              title: "quantity",
+              description: "unable to increase or decrease",
+            },
+            {
+              hideProgressBar: "true",
+              type: "warning",
+            }
+          );
         }
       }
     },
