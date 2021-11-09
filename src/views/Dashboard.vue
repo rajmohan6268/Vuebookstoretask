@@ -1,7 +1,7 @@
 <template>
   <div class="mx-auto overflow-hidden 2xl:container">
     <div
-      class="items-center justify-between p-2 mb-4 bg-gray-100 lg:p-4 md:p-3 2xl:mb-10 md:flex text-title"
+      class="items-center justify-between p-2 mb-4 bg-gray-100  lg:p-4 md:p-3 2xl:mb-10 md:flex text-title"
     >
       <div class="text-lg font-bold text-left lg:text-2xl">
         {{ user?.roles[0] === "ROLE_USER" ? "User" : "Admin" }}
@@ -19,7 +19,7 @@
 
         <button
           @click="logOut()"
-          class="px-2 py-1 text-xl font-medium text-red-500 bg-white shadow-sm xl:py-2 xl:px-8"
+          class="px-2 py-1 text-xl font-medium text-red-500 bg-white shadow-sm  xl:py-2 xl:px-8"
         >
           <font-awesome-icon class="mr-1 xl:mr-2" icon="sign-out-alt" /> logout
         </button>
@@ -27,10 +27,10 @@
     </div>
 
     <div
-      class="transition-all duration-1000 ease-in-out border border-gray-100 xl:p-4"
+      class="transition-all duration-1000 ease-in-out border border-gray-100  xl:p-4"
     >
       <div
-        class="space-x-5 text-lg font-semibold border-b-2 border-gray-200 fx-i tetx-sec"
+        class="space-x-5 text-lg font-semibold border-b-2 border-gray-200  fx-i tetx-sec"
       >
         <button
           :class="currentTab == 'Inventory' ? 'active-tab' : 'inacive-tab'"
@@ -83,7 +83,7 @@
             <button
               v-if="user?.roles[0] === 'ROLE_ADMIN'"
               @click="showaddbook()"
-              class="px-4 py-2 m-2 text-white bg-gray-100 rounded-sm shadow blue"
+              class="px-4 py-2 m-2 text-white bg-gray-100 rounded-sm shadow  blue"
             >
               <font-awesome-icon class="mr-2" icon="plus" /> Add New Book
             </button>
@@ -95,16 +95,15 @@
           <div
             v-for="(book, index) in Books"
             :key="index"
-            class="items-center p-3 border border-gray-200 rounded-lg lg:justify-between hover:shadow hover:border-gray-200 lg:flex"
+            class="items-center p-3 border border-gray-200 rounded-lg  lg:justify-between hover:shadow hover:border-gray-200 lg:flex"
           >
             <div class="md:flex">
               <div class="flex-shrink-0 w-40">
-
                 <img :src="book.image" class="w-48 rounded-lg" />
               </div>
 
               <div
-                class="flex-col justify-around w-full ml-2 font-bold text-left md:flex md:ml-8"
+                class="flex-col justify-around w-full ml-2 font-bold text-left  md:flex md:ml-8"
               >
                 <div class="items-center text-lg md:flex md:space-x-5">
                   <div class="truncate md:max-w-md">
@@ -128,7 +127,7 @@
             </div>
 
             <div
-              class="justify-between max-w-sm md:space-x-3 fx-i md:max-w-none md:justify-start"
+              class="justify-between max-w-sm  md:space-x-3 fx-i md:max-w-none md:justify-start"
             >
               <div class="text-xl font-medium md:text-2xl">Available:</div>
               <div class="px-4 py-2 text-xl font-bold">{{ book.quantity }}</div>
@@ -412,7 +411,6 @@
           </div>
         </div>
 
-
         <div class="p-4 fx-col">
           <label class="mb-2">Billing email </label>
 
@@ -446,7 +444,9 @@
 import modal from "./../components/modal.vue";
 import imageupload from "./../components/imageupload.vue";
 import api from "./../services/api";
+import { createToast } from "mosha-vue-toastify";
 
+import "mosha-vue-toastify/dist/style.css";
 const book = {
   title: "",
   image: "",
@@ -545,19 +545,38 @@ export default {
             amount: this.Books[this.activeBookindex].price * this.buyquantity,
             email: this.billingemail,
           })
-          .then(() => {
+          .then((data) => {
             this.getbooks();
             this.getorderdetails();
             this.showcartmodal = false;
             this.showBuyquantity = false;
             this.activeBookindex = null;
             this.buyquantity = 0;
+            createToast(
+              {
+                title: "order created",
+                description: data,
+              },
+              {
+                type: "success",
+                transition: "slide",
+                showIcon: "true",
+                toastBackgroundColor: "green",
+                hideProgressBar: "true",
+              }
+            );
           })
           .catch((error) => {
             return error;
           });
       } else {
-        window.alert("invalid email");
+        createToast("invalid email", {
+          type: "danger",
+          transition: "slide",
+          showIcon: "true",
+          toastBackgroundColor: "red",
+          hideProgressBar: "true",
+        });
       }
     },
     logOut() {
@@ -611,8 +630,22 @@ export default {
           (this.Books[this.activeBookindex].quantity > this.buyquantity)
         ) {
           this.buyquantity = this.buyquantity + 1;
+          createToast("count increase", {
+            type: "success",
+            transition: "zoom",
+            showIcon: "true",
+            toastBackgroundColor: "green",
+            hideProgressBar: "true",
+          });
         } else if ((intent == "dec") & (this.buyquantity > 0)) {
           this.buyquantity = this.buyquantity - 1;
+          createToast("count decreased", {
+            type: "success",
+            transition: "zoom",
+            showIcon: "true",
+            toastBackgroundColor: "green",
+            hideProgressBar: "true",
+          });
         }
       }
     },
