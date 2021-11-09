@@ -722,15 +722,31 @@ export default {
       this.book = JSON.parse(JSON.stringify(book));
     },
     addBook() {
+      this.show = false;
+
       api
         .post("/users/admin/books", this.book)
         .then(() => {
-          this.show = false;
+          createToast(
+            {
+              title: "BOOK",
+              description: "add book sucessfully",
+            },
+            {
+              hideProgressBar: "true",
+              transition: "zoom",
+              type: "success",
+              showIcon: "true",
+            }
+          );
+
           this.book = JSON.parse(JSON.stringify(book));
           this.getbooks();
         })
 
         .catch((error) => {
+          this.book = JSON.parse(JSON.stringify(book));
+
           return error;
         });
     },
