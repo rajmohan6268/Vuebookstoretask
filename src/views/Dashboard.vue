@@ -585,8 +585,21 @@ export default {
     },
 
     buy(id, index) {
-      if (this.activeBookindex == index) {
+      if ((this.activeBookindex == index) & (this.buyquantity > 0)) {
         this.showcartmodal = true;
+      } else {
+        createToast(
+          {
+            title: "cart quantity",
+            description: "add items to buy",
+          },
+          {
+            hideProgressBar: "true",
+            transition: "slide",
+            type: "default",
+            showIcon: "true",
+          }
+        );
       }
     },
     getbooks(val) {
