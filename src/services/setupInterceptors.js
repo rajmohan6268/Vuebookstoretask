@@ -15,7 +15,7 @@ const setup = (store) => {
     }
   );
 
-  // refreh token not implemented as not in requiremts for this project task!
+  // refreh token implemented with interceptors
 
   axiosInstance.interceptors.response.use(
     (res) => {
@@ -25,6 +25,10 @@ const setup = (store) => {
       const originalConfig = err.config;
 
       if (originalConfig.url !== "/auth/signin" && err.response) {
+        if (err.response.status === 400) {
+          store.dispatch("auth/logout");
+          location.reload();
+        }
         if (err.response.status === 401 && !originalConfig._retry) {
           originalConfig._retry = true;
 
@@ -33,12 +37,15 @@ const setup = (store) => {
               refreshToken: TokenService.getLocalRefreshToken(),
             });
 
-            const { accessToken } = rs.data;
+            if (rs.data.sucess) {
+              store.dispatch("auth/setrefreshtoken", rs.data);
+              TokenService.setUser(rs.data);
 
-            store.dispatch('auth/refreshToken', accessToken);
-            TokenService.updateLocalAccessToken(accessToken);
+              TokenService.setLocalAccessToken(rs.data.accessToken);
+              TokenService.setLocalRefreshToken(rs.data.refreshToken);
 
-            return axiosInstance(originalConfig);
+              return axiosInstance(originalConfig);
+            }
           } catch (_error) {
             return Promise.reject(_error);
           }

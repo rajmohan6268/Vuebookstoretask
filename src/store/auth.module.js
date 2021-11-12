@@ -39,6 +39,10 @@ export const auth = {
     },
   },
   mutations: {
+    setrefreshtoken(state, user) {
+      state.status.loggedIn = true;
+      state.user = user;
+    },
     loginSuccess(state, user) {
       state.status.loggedIn = true;
       state.user = user;
