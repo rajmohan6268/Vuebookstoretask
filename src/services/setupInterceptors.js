@@ -41,8 +41,8 @@ const setup = (store) => {
               store.dispatch("auth/setrefreshtoken", rs.data);
               TokenService.setUser(rs.data);
 
-              TokenService.setLocalAccessToken(rs.data.accessToken);
-              TokenService.setLocalRefreshToken(rs.data.refreshToken);
+              // TokenService.setLocalAccessToken(rs.data.accessToken);
+              // TokenService.setLocalRefreshToken(rs.data.refreshToken);
 
               return axiosInstance(originalConfig);
             }

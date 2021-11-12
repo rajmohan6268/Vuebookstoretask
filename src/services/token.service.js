@@ -23,7 +23,16 @@ class TokenService {
     console.log(JSON.stringify(user));
     localStorage.setItem("user", JSON.stringify(user));
   }
-
+  setLocalAccessToken(accessToken) {
+    let user = JSON.parse(localStorage.getItem("user"));
+    user.accessToken = accessToken;
+    localStorage.setItem("user", JSON.stringify(user));
+  }
+  setLocalRefreshToken(refreshToken) {
+    let user = JSON.parse(localStorage.getItem("user"));
+    user.refreshToken = refreshToken;
+    localStorage.setItem("user", JSON.stringify(user));
+  }
   removeUser() {
     localStorage.removeItem("user");
   }
