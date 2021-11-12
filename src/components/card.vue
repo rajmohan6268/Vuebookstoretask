@@ -4,7 +4,7 @@
   >
     <div class="md:flex">
       <div class="flex-shrink-0 w-40">
-        <img :src="book.image" class="w-48 rounded-lg" />
+        <img :src="book.image" class="rounded-lg " />
       </div>
 
       <div

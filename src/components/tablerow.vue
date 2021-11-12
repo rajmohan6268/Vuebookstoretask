@@ -1,7 +1,7 @@
 <template>
   <tr class="text-center divide-x">
     <!-- <th class="w-4">{{index+1}}</th> -->
-    <td class="w-1/6 p-4 text-left truncate">
+    <td  class="w-1/6 p-4 text-left truncate">
       {{ row._id || "--" }}
     </td>
     <td class="w-1/6 truncate">{{ row.email || "" }}</td>

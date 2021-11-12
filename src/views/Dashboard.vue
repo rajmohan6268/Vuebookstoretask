@@ -47,7 +47,7 @@
               </button>
 
               <input
-                debounce="1000"
+                debounce="500"
                 v-model="searchterm"
                 class="w-full p-2 pl-10 text-black bg-gray-100 border rounded-md "
                 type="search"
@@ -159,8 +159,13 @@
               />
             </tbody>
           </table>
-        </div>
-
+          <!-- <div v-if="!filteredorderr.length" class="space-y-4">
+            <div  v-for="i in 15" :key="i"  class="flex justify-between w-full space-x-3">
+              <div v-for="i in 6" :key="i" class="w-full p-4 bg-gray-200 animate-pulse" />
+            </div>
+          </div>
+         -->
+</div>
         <div
           v-if="!filteredorderr.length"
           class="w-full py-20 mx-auto text-center"
@@ -411,7 +416,7 @@ export default {
     searchterm() {
       setTimeout(() => {
         this.getbooks(this.searchterm);
-      }, 800);
+      }, 500);
     },
   },
   mounted() {
