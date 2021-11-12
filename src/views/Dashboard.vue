@@ -2,11 +2,13 @@
   <div class="mx-auto overflow-y-scroll 2xl:container">
     <!-- header -->
     <Header />
+
+    <!-- tabs start -->
     <div
-      class="transition-all duration-1000 ease-in-out border border-gray-100 xl:p-4"
+      class="transition-all duration-1000 ease-in-out border border-gray-100  xl:p-4"
     >
       <div
-        class="space-x-5 text-lg font-semibold border-b-2 border-gray-200 fx-i tetx-sec"
+        class="space-x-5 text-lg font-semibold border-b-2 border-gray-200  fx-i tetx-sec"
       >
         <button
           :class="currentTab == 'Inventory' ? 'active-tab' : 'inacive-tab'"
@@ -59,7 +61,7 @@
             <button
               v-if="user?.roles[0] === 'ROLE_ADMIN'"
               @click="showaddbook()"
-              class="px-4 py-2 m-2 text-white bg-gray-100 rounded-sm shadow blue"
+              class="px-4 py-2 m-2 text-white bg-gray-100 rounded-sm shadow  blue"
             >
               <font-awesome-icon class="mr-2" icon="plus" /> Add New Book
             </button>
@@ -173,7 +175,8 @@
         </div>
       </div>
     </div>
-
+    <!-- tabs end -->
+    <!-- add book modal -->
     <modal id="modal" v-if="show" @close="show = false">
       <template #header>
         <div
@@ -267,6 +270,8 @@
         </div></template
       >
     </modal>
+
+    <!-- add confim cart modal -->
 
     <modal id="modal" v-if="showcartmodal" @close="showcartmodal = false">
       <template #header>
