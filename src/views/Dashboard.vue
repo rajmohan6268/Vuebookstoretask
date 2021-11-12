@@ -1,36 +1,12 @@
 <template>
   <div class="mx-auto overflow-y-scroll 2xl:container">
+    <!-- header -->
+    <Header />
     <div
-      class="items-center justify-between p-2 mb-4 bg-gray-100  lg:p-4 md:p-3 2xl:mb-10 md:flex text-title"
-    >
-      <div class="text-lg font-bold text-left lg:text-2xl">
-        {{ user?.roles[0] === "ROLE_USER" ? "User" : "Admin" }}
-        Dashboard
-      </div>
-
-      <div class="flex items-center justify-between max-w-sm lg:max-w-none">
-        <div class="fx-i">
-          <img
-            src="https://icons.iconarchive.com/icons/papirus-team/papirus-status/512/avatar-default-icon.png"
-            class="w-8 xl:w-12"
-          />
-          <div class="mx-2 xl:mx-4">{{ user?.username }}</div>
-        </div>
-
-        <button
-          @click="logOut()"
-          class="px-2 py-1 text-xl font-medium text-red-500 bg-white shadow-sm  xl:py-2 xl:px-8"
-        >
-          <font-awesome-icon class="mr-1 xl:mr-2" icon="sign-out-alt" /> logout
-        </button>
-      </div>
-    </div>
-
-    <div
-      class="transition-all duration-1000 ease-in-out border border-gray-100  xl:p-4"
+      class="transition-all duration-1000 ease-in-out border border-gray-100 xl:p-4"
     >
       <div
-        class="space-x-5 text-lg font-semibold border-b-2 border-gray-200  fx-i tetx-sec"
+        class="space-x-5 text-lg font-semibold border-b-2 border-gray-200 fx-i tetx-sec"
       >
         <button
           :class="currentTab == 'Inventory' ? 'active-tab' : 'inacive-tab'"
@@ -83,7 +59,7 @@
             <button
               v-if="user?.roles[0] === 'ROLE_ADMIN'"
               @click="showaddbook()"
-              class="px-4 py-2 m-2 text-white bg-gray-100 rounded-sm shadow  blue"
+              class="px-4 py-2 m-2 text-white bg-gray-100 rounded-sm shadow blue"
             >
               <font-awesome-icon class="mr-2" icon="plus" /> Add New Book
             </button>
@@ -359,7 +335,9 @@ import api from "./../services/api";
 import { createToast } from "mosha-vue-toastify";
 import card from "./../components/card.vue";
 import tablerow from "./../components/tablerow.vue";
+import Header from "../components/header.vue";
 import "mosha-vue-toastify/dist/style.css";
+
 const book = {
   title: "",
   image: "",
@@ -375,6 +353,7 @@ export default {
     modal,
     imageupload,
     card,
+    Header,
   },
   data() {
     return {
@@ -475,9 +454,9 @@ export default {
               {
                 type: "success",
                 transition: "slide",
-                showIcon: "true",
+                showIcon: true,
                 toastBackgroundColor: "green",
-                hideProgressBar: "true",
+                hideProgressBar: true,
               }
             );
           })
@@ -488,15 +467,11 @@ export default {
         createToast("invalid email", {
           type: "danger",
           transition: "slide",
-          showIcon: "true",
+          showIcon: true,
           toastBackgroundColor: "red",
-          hideProgressBar: "true",
+          hideProgressBar: true,
         });
       }
-    },
-    logOut() {
-      this.$store.dispatch("auth/logout");
-      this.$router.push("/login");
     },
 
     buy(e) {
@@ -509,10 +484,10 @@ export default {
             description: "add items to buy",
           },
           {
-            hideProgressBar: "true",
+            hideProgressBar: true,
             transition: "slide",
             type: "default",
-            showIcon: "true",
+            showIcon: true,
           }
         );
       }
@@ -561,18 +536,18 @@ export default {
           createToast("count increase", {
             type: "success",
             transition: "zoom",
-            showIcon: "true",
+            showIcon: true,
             toastBackgroundColor: "green",
-            hideProgressBar: "true",
+            hideProgressBar: true,
           });
         } else if ((e.intent == "dec") & (this.buyquantity > 0)) {
           this.buyquantity = this.buyquantity - 1;
           createToast("count decreased", {
             type: "success",
             transition: "zoom",
-            showIcon: "true",
+            showIcon: true,
             toastBackgroundColor: "green",
-            hideProgressBar: "true",
+            hideProgressBar: true,
           });
         } else {
           createToast(
@@ -581,7 +556,7 @@ export default {
               description: "unable to increase or decrease",
             },
             {
-              hideProgressBar: "true",
+              hideProgressBar: true,
               type: "warning",
             }
           );
@@ -604,9 +579,9 @@ export default {
               description: intent + "reased",
             },
             {
-              hideProgressBar: "true",
+              hideProgressBar: true,
               type: "success",
-              showIcon: "true",
+              showIcon: true,
               transition: "zoom",
             }
           );
@@ -622,9 +597,9 @@ export default {
         .then(() => {
           this.getbooks();
           createToast("book deleted", {
-            hideProgressBar: "true",
+            hideProgressBar: true,
             type: "success",
-            showIcon: "true",
+            showIcon: true,
             transition: "zoom",
           });
         })
@@ -648,10 +623,10 @@ export default {
               description: "add book sucessfully",
             },
             {
-              hideProgressBar: "true",
+              hideProgressBar: true,
               transition: "zoom",
               type: "success",
-              showIcon: "true",
+              showIcon: true,
             }
           );
 

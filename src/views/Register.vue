@@ -35,9 +35,9 @@ export default {
         (data) => {
           this.message = data.message;
           createToast("user created ", {
-            hideProgressBar: "true",
+            hideProgressBar: true,
             type: "success",
-            showIcon: "true",
+            showIcon: true,
             transition: "zoom",
           });
           setTimeout(() => {
@@ -48,7 +48,7 @@ export default {
           createToast(error.response.data.message, {
             type: "info",
             transition: "bounce",
-            showIcon: "true",
+            showIcon: true,
             toastBackgroundColor: "red",
           });
           this.loading = false;
