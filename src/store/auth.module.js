@@ -9,6 +9,9 @@ export const auth = {
   namespaced: true,
   state: initialState,
   actions: {
+    setrefreshtoken({ commit }, user) {
+      commit("setrefreshtoken", user);
+    },
     login({ commit }, user) {
       return AuthService.login(user).then(
         (user) => {
