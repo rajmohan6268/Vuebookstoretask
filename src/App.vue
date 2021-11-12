@@ -1,14 +1,15 @@
 <template>
-<div class="">
-    <div class="flex justify-center w-full my-3 space-x-4 text-lg font-semibold md:my-5 2xl:my-10">
-    <router-link to="/"> Home</router-link>
-    <router-link to="/login">login</router-link>
-    <router-link to="/Register">Register</router-link>
-    <router-link to="/Dashboard">Dashboard</router-link>
+  <div class="h-screen overflow-auto">
+    <div
+      class="flex justify-center w-full my-3 space-x-4 text-lg font-semibold  md:my-5 2xl:my-10"
+    >
+      <router-link to="/"> Home</router-link>
+      <router-link to="/login">login</router-link>
+      <router-link to="/Register">Register</router-link>
+      <router-link to="/Dashboard">Dashboard</router-link>
+    </div>
+    <router-view />
   </div>
-  <router-view />
-
-</div>
 </template>
 
 <script>
