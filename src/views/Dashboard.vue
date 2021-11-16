@@ -602,8 +602,10 @@ export default {
     },
 
     deleteBook(_id) {
+
+      console.log(_id)
       api
-        .delete(`/users/admin/books/${_id}`)
+        .delete(`/users/admin/books/${_id._id}`)
         .then(() => {
           this.getbooks();
           createToast("book deleted", {
