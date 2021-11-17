@@ -48,46 +48,60 @@
   </button>
 </template>
 <script>
+import { createToast } from "mosha-vue-toastify";
+
 export default {
   data: () => ({
     fileName: "",
     previewUrl: "",
     url: "",
-
   }),
   methods: {
     clear() {
       this.fileName = "";
       this.previewUrl = "";
       this.url = "";
-      
-        this.$emit("input", {
-            url: null,
-          });
+
+      this.$emit("input", {
+        url: null,
+      });
     },
     onFilePicked(event) {
       const files = event.target.files;
-      if (files[0] !== undefined) {
-        this.fileName = files[0].name;
-        this.previewUrl = URL.createObjectURL(files[0]);
+      console.log(files[0].type, "  /files/  ");
 
-        if (this.fileName.lastIndexOf(".") <= 0) {
-          return;
-        }
+      let isimg = files[0].type.includes("image");
 
-        const fr = new FileReader();
-        fr.readAsDataURL(files[0]);
-        fr.addEventListener("load", () => {
-         // console.log(result, "result");
-          this.url = fr.result;
-          this.$emit("input", {
-            url: this.url,
+      if (isimg) {
+        if (files[0] !== undefined) {
+          this.fileName = files[0].name;
+          this.previewUrl = URL.createObjectURL(files[0]);
+
+          if (this.fileName.lastIndexOf(".") <= 0) {
+            return;
+          }
+
+          const fr = new FileReader();
+          fr.readAsDataURL(files[0]);
+          fr.addEventListener("load", () => {
+            this.url = fr.result;
+            this.$emit("input", {
+              url: this.url,
+            });
           });
-        });
+        } else {
+          this.fileName = "";
+          this.fileObject = null;
+          this.url = "";
+        }
       } else {
-        this.fileName = "";
-        this.fileObject = null;
-        this.url = "";
+        createToast("invalid image  format", {
+          type: "danger",
+          transition: "slide",
+          showIcon: true,
+          toastBackgroundColor: "red",
+          hideProgressBar: true,
+        });
       }
     },
   },
